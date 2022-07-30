@@ -39,6 +39,8 @@ public class CharacterControllerScript : MonoBehaviour
         currentSpeedBoost = 0f;
         turnRot = transform.rotation.y;
         rollRot = 45f;
+        // Hide and lock cursor to center of screen
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
