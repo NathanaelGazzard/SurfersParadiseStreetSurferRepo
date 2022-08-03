@@ -5,6 +5,9 @@ using UnityEngine;
 public class CharacterControllerScript : MonoBehaviour
 {
     CharacterController characterControllerRef;
+    [SerializeField] GameObject viewModelRef;
+
+    [SerializeField] float viewModelRotSpeed = 20f;
 
     bool isHitchHiking = false;//this will be set to true when the player is hanging on to a vehicle
     public bool carInRange = false;
@@ -59,7 +62,7 @@ public class CharacterControllerScript : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                transform.position = hitcHikerCar.transform.position /* add offset and fix rotation*/;
+                transform.position = hitcHikerCar.transform.position + hitchHikerCarOffset /* add offset and fix rotation*/;
             }
             else
             {
@@ -80,9 +83,11 @@ public class CharacterControllerScript : MonoBehaviour
     void MovementControls()
     {
         //regular movement
-        Vector3 moveDir = new Vector3(Input.GetAxis("Horizontal") * normalMoveSpeed + currentSpeedBoost, 0f, Input.GetAxis("Vertical") * normalMoveSpeed + currentSpeedBoost);
+        // * normalMoveSpeed + currentSpeedBoost
+        Vector3 moveDir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+        Vector3 moveMag = Vector3.Normalize(moveDir) * normalMoveSpeed + Vector3.Normalize(moveDir) * currentSpeedBoost;
 
-        moveDir = transform.TransformDirection(moveDir);
+        moveMag = transform.TransformDirection(moveMag);
 
         if (isJumping)
         {
@@ -98,7 +103,7 @@ public class CharacterControllerScript : MonoBehaviour
             }
             else if (Input.GetKey(KeyCode.Space))
             {
-                moveDir.y += jumpSpeed * jumpDecay;
+                moveMag.y += jumpSpeed * jumpDecay;
                 jumpTimer -= Time.deltaTime;
                 jumpDecay *= 0.95f;
                 if (jumpTimer <= 0)
@@ -110,7 +115,7 @@ public class CharacterControllerScript : MonoBehaviour
             }
             else
             {
-                moveDir.y += jumpSpeed * jumpDecay;
+                moveMag.y += jumpSpeed * jumpDecay;
                 jumpTimer -= 4 * Time.deltaTime;
                 jumpDecay *= 0.95f;
                 if (jumpTimer <= 0)
@@ -125,7 +130,7 @@ public class CharacterControllerScript : MonoBehaviour
         else if (!characterControllerRef.isGrounded)
         {
             gravityAccelleration += 1f * Time.deltaTime; //multiply Time.deltaTime by a higher value to increase the initial gravity fall pace
-            moveDir.y = gravitySpeed * gravityAccelleration;
+            moveMag.y = gravitySpeed * gravityAccelleration;
         }
         else
         {
@@ -138,11 +143,17 @@ public class CharacterControllerScript : MonoBehaviour
             else if (!isJumping)
             {
                 // applies a nominal amount of gravity when the player is grounded to ensure they don't drift above the ground accidentally preventing jumps
-                moveDir.y = -0.01f;
+                moveMag.y = -0.01f;
             }
         }
 
-        characterControllerRef.Move(moveDir * Time.deltaTime);
+        characterControllerRef.Move(moveMag * Time.deltaTime);
+
+        if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            //rotates player model in the direction they're moving
+            viewModelRef.transform.rotation = Quaternion.Slerp(viewModelRef.transform.rotation, Quaternion.LookRotation(moveMag), viewModelRotSpeed * Time.deltaTime);
+        }
     }
 
     void CameraControls()
