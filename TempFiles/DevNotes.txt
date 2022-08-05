@@ -1,0 +1,12 @@
+To Do:
+
+
+
+
+
+
+
+Credits:
+	https://sharpcoderblog.com/blog/third-person-camera-in-unity-3d - camera noclip
+	https://assetstore.unity.com/packages/3d/environments/landscapes/simple-low-poly-nature-pack-157552#content
+
