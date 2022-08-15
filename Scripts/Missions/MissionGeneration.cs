@@ -8,11 +8,11 @@ public class MissionGeneration
     string mode;
     string[] possibleItems = { "Item_1", "Item_2", "Item_3" };
 
-    public MissionGeneration(string m)
+    public MissionGeneration() 
     {
-        mode = m;
-        Debug.Log("Construcotr");
+
     }
+
     public void createMission(Vector3 position)
     {
 

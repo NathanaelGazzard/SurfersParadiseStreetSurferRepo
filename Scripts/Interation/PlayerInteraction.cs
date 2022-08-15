@@ -51,9 +51,7 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     interactionText.text = "Not a valid drop off";
                 }
-            }
-            else // for now is a mission recieval interactable
-            {
+            } else if  (hit.collider.GetComponent<MissionDropOff>() != null) {
                 hitSomething = true;
                 MissionRecieval interactable = hit.collider.GetComponent<MissionRecieval>();
                 if (missionStatus)
@@ -71,6 +69,9 @@ public class PlayerInteraction : MonoBehaviour
                         interactable.Interact();
                     }
                 }
+            } else // for now is a mission recieval interactable
+            {
+                Debug.Log("Interacting with eashy");
             }
         }
         interactionUI.SetActive(hitSomething);

@@ -6,6 +6,11 @@ using Random = UnityEngine.Random;
 
 public class MissionRecieval : MonoBehaviour, IInteractable
 {
+    public enum MODE
+    {
+        Random, Story
+    };
+
     public GameObject[] missionDropOffPoints;
 
     public string GetDescription()
@@ -26,7 +31,7 @@ public class MissionRecieval : MonoBehaviour, IInteractable
         MissionDropOff dropOffPoint = missionDropOff.GetComponent<MissionDropOff>();
         Debug.Log(missionDropOff.transform.position);
 
-        MissionGeneration mission = new MissionGeneration("Easy");
+        MissionGeneration mission = new MissionGeneration();
         mission.createMission(missionDropOff.transform.position);
 
         dropOffPoint.SetAsDropOff();
