@@ -31,8 +31,8 @@ public class MissionRecieval : MonoBehaviour, IInteractable
         MissionDropOff dropOffPoint = missionDropOff.GetComponent<MissionDropOff>();
         Debug.Log(missionDropOff.transform.position);
 
-        MissionGeneration mission = new MissionGeneration();
-        mission.createMission(missionDropOff.transform.position);
+        //MissionGeneration mission = new MissionGeneration();
+        //mission.createMission(missionDropOff.transform.position);
 
         dropOffPoint.SetAsDropOff();
         dropOffPoint.SetMissionIntText("Mission drop off");

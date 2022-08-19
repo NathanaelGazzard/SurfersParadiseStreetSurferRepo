@@ -18,6 +18,13 @@ public class WishlistItem
 
 public class GameManagerScript : MonoBehaviour
 {
+    // Mission
+    [SerializeField] GameObject[] missionPickUpPoints;
+    [SerializeField] GameObject[] missionDropOffPoints;
+
+    [SerializeField] GameObject[] rndMissionPickUpPoints;
+
+    //UI
     [SerializeField] GameObject menuBackDropUI;
 
     [SerializeField] GameObject gameplayUI;
@@ -57,6 +64,8 @@ public class GameManagerScript : MonoBehaviour
         {
             wishlistButtonLabels[i].text = wishlistItems[i].itemName + " - $" + wishlistItems[i].itemCost + ".00";
         }
+
+        InitialiseMissions();
     }
 
     void InitWishlist()
@@ -247,4 +256,12 @@ public class GameManagerScript : MonoBehaviour
         confirmExitUI.SetActive(false);
     }
 
+
+
+
+
+    public void InitialiseMissions()
+    {
+        MissionGeneration ms = new MissionGeneration("SUS");
+    }
 }
