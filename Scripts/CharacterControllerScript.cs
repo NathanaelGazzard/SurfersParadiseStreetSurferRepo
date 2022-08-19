@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CharacterControllerScript : MonoBehaviour
 {
+    //IMPLEMENT ANIMATION CONTROLS
+    // ADD CAMERA ZOOM CHANGE BASED ON SPEED
+
+
     CharacterController characterControllerRef;
     [SerializeField] GameObject viewModelRef;
 
@@ -24,7 +28,7 @@ public class CharacterControllerScript : MonoBehaviour
 
     [SerializeField] float normalMoveSpeed; //players skating speed
     float currentSpeedBoost; //when the player lets go of a moving vehicle, this will be set to the speed of the vehicle and will then decay over time
-    [SerializeField] float boostDecayRate = 1; //rate that the boost speed will reduce
+    [SerializeField] float boostDecayRate = 0.5f; //rate that the boost speed will reduce
 
     bool isJumping = false;
     [SerializeField] float jumpSpeed = 5f;
@@ -36,14 +40,14 @@ public class CharacterControllerScript : MonoBehaviour
     GameObject hitcHikerCar;
     Vector3 hitchHikerCarOffset;
 
+    Vector3 previousPos;
+
     void Start()
     {
         characterControllerRef = GetComponent<CharacterController>();
         currentSpeedBoost = 0f;
         turnRot = transform.rotation.y;
         rollRot = 45f;
-        // Hide and lock cursor to center of screen
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
@@ -54,21 +58,24 @@ public class CharacterControllerScript : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0) && carInRange)
             {
                 isHitchHiking = true;
-                hitchHikerCarOffset = hitcHikerCar.transform.position - transform.position;
+                hitchHikerCarOffset = hitcHikerCar.transform.position - transform.position;//this value seems to be fine - the offset issues seem to come from implementation
+                previousPos = transform.position;
             }
             MovementControls();
         }
         else
         {
+
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                transform.position = hitcHikerCar.transform.position + hitchHikerCarOffset /* add offset and fix rotation*/;
+                transform.position = hitcHikerCar.transform.TransformPoint(-hitchHikerCarOffset);//hitcHikerCar.transform.position + hitchHikerCarOffset;
+                currentSpeedBoost = (transform.position - previousPos).magnitude * 1.2f / Time.deltaTime;//boost when you let go of a car is actually slightly faster than the car
             }
             else
             {
                 isHitchHiking = false;
-                currentSpeedBoost = hitcHikerCar.GetComponent<Rigidbody>().velocity.magnitude;
             }
+            previousPos = transform.position;
         }
 
 
@@ -79,11 +86,10 @@ public class CharacterControllerScript : MonoBehaviour
     {
         CameraControls();
     }
-            
+
     void MovementControls()
     {
         //regular movement
-        // * normalMoveSpeed + currentSpeedBoost
         Vector3 moveDir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
         Vector3 moveMag = Vector3.Normalize(moveDir) * normalMoveSpeed + Vector3.Normalize(moveDir) * currentSpeedBoost;
 
@@ -149,7 +155,7 @@ public class CharacterControllerScript : MonoBehaviour
 
         characterControllerRef.Move(moveMag * Time.deltaTime);
 
-        if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             //rotates player model in the direction they're moving
             viewModelRef.transform.rotation = Quaternion.Slerp(viewModelRef.transform.rotation, Quaternion.LookRotation(moveMag), viewModelRotSpeed * Time.deltaTime);
@@ -164,11 +170,7 @@ public class CharacterControllerScript : MonoBehaviour
 
         rollRot = Mathf.Clamp(rollRot, maxCamClampAngle, minCamClampAngle); //limits the camera's vertical rotation to a defined range
 
-        if (!isHitchHiking)
-        {
-            //if the character is holding onto a car, they cannot turn, their turning will be linked to the car 
-            transform.rotation = Quaternion.Euler(0f, turnRot, 0f); //turns the character based on the new rotation
-        }
+        transform.rotation = Quaternion.Euler(0f, turnRot, 0f); //turns the character based on the new rotation
         cameraArmRef.transform.localRotation = Quaternion.Euler(rollRot, 0f, 0f); //rotates the camera vertically
     }
 
@@ -197,7 +199,7 @@ public class CharacterControllerScript : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Car") && !isHitchHiking)
+        if (other.CompareTag("Car") && !isHitchHiking)
         {
             print("Can't Grab :(");
             carInRange = false;
