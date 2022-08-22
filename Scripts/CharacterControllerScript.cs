@@ -10,6 +10,7 @@ public class CharacterControllerScript : MonoBehaviour
 
     CharacterController characterControllerRef;
     [SerializeField] GameObject viewModelRef;
+    [SerializeField] CameraNoClipScript camNoClipScriptRef;
 
     [SerializeField] float viewModelRotSpeed = 20f;
 
@@ -45,6 +46,7 @@ public class CharacterControllerScript : MonoBehaviour
     void Start()
     {
         characterControllerRef = GetComponent<CharacterController>();
+        camNoClipScriptRef = GetComponent<CameraNoClipScript>();
         currentSpeedBoost = 0f;
         turnRot = transform.rotation.y;
         rollRot = 45f;
@@ -53,6 +55,22 @@ public class CharacterControllerScript : MonoBehaviour
 
     void Update()
     {
+        if(currentSpeedBoost > 0)
+        {
+            //if the player has much boost, the camera noClip is disabled and the camera distance is lock fairly close. This prevents camera rubberbanding at high speeds.
+            if (currentSpeedBoost > 10f)
+            {
+                camNoClipScriptRef.disableNoClip = true;
+            }
+            else
+            {
+                camNoClipScriptRef.disableNoClip = false;
+            }
+            SpeedScreenDistortion();
+        }
+
+
+
         if (!isHitchHiking)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) && carInRange)
@@ -69,7 +87,7 @@ public class CharacterControllerScript : MonoBehaviour
             if (Input.GetKey(KeyCode.Mouse0))
             {
                 transform.position = hitcHikerCar.transform.TransformPoint(-hitchHikerCarOffset);//hitcHikerCar.transform.position + hitchHikerCarOffset;
-                currentSpeedBoost = (transform.position - previousPos).magnitude * 1.2f / Time.deltaTime;//boost when you let go of a car is actually slightly faster than the car
+                currentSpeedBoost = (transform.position - previousPos).magnitude * 1.1f / Time.deltaTime;//boost when you let go of a car is actually slightly faster than the car
             }
             else
             {
@@ -149,7 +167,7 @@ public class CharacterControllerScript : MonoBehaviour
             else if (!isJumping)
             {
                 // applies a nominal amount of gravity when the player is grounded to ensure they don't drift above the ground accidentally preventing jumps
-                moveMag.y = -0.01f;
+                moveMag.y = -0.05f;
             }
         }
 
@@ -191,7 +209,6 @@ public class CharacterControllerScript : MonoBehaviour
     {
         if (other.CompareTag("Car") && !isHitchHiking)
         {
-            print("Can Grab");
             carInRange = true;
             hitcHikerCar = other.gameObject;
         }
@@ -201,9 +218,14 @@ public class CharacterControllerScript : MonoBehaviour
     {
         if (other.CompareTag("Car") && !isHitchHiking)
         {
-            print("Can't Grab :(");
             carInRange = false;
             hitcHikerCar = null;
         }
+    }
+
+    void SpeedScreenDistortion()
+    {
+        //add screen blur around edges relative to boost speed
+        //change fov relative to boost speed
     }
 }

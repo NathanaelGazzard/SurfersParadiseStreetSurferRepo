@@ -11,6 +11,8 @@ public class CameraNoClipScript : MonoBehaviour
     Transform parentTransform;
     float defaultDistance;
 
+    public bool disableNoClip = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,17 +26,26 @@ public class CameraNoClipScript : MonoBehaviour
     void LateUpdate()
     {
         Vector3 currentPos = defaultPos;
-        RaycastHit hit;
-        Vector3 dirTmp = parentTransform.TransformPoint(defaultPos) - referenceTransform.position;
-        if (Physics.SphereCast(referenceTransform.position, collisionOffset, dirTmp, out hit, defaultDistance))
-        {
-            currentPos = (directionNormalized * (hit.distance - collisionOffset));
 
-            transform.localPosition = currentPos;
+        //if hitching with a car, zoom the camera in just a bit, but lock it so it cant jitter in and out
+        if (disableNoClip)
+        {
+            transform.localPosition = defaultPos + Vector3.forward * 4;
         }
         else
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, currentPos, cameraZoomSpeed * Time.deltaTime);
+            RaycastHit hit;
+            Vector3 dirTmp = parentTransform.TransformPoint(defaultPos) - referenceTransform.position;
+            if (Physics.SphereCast(referenceTransform.position, collisionOffset, dirTmp, out hit, defaultDistance))
+            {
+                currentPos = (directionNormalized * (hit.distance - collisionOffset));
+
+                transform.localPosition = currentPos;
+            }
+            else
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, currentPos, cameraZoomSpeed * Time.deltaTime);
+            }
         }
     }
 }

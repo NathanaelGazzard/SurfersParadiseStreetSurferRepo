@@ -11254,6 +11254,10 @@ PrefabInstance:
       propertyPath: rotationSpeed
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 6792849211773862703, guid: cf2cd36740fb02a48a1dde258649a458, type: 3}
+      propertyPath: m_SlopeLimit
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf2cd36740fb02a48a1dde258649a458, type: 3}
 --- !u!1 &6893908623236878228 stripped
