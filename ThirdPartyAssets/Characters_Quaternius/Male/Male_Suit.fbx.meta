@@ -1,11 +1,41 @@
 fileFormatVersion: 2
-guid: 6016af514871eca49af96afa89940250
+guid: 04c6731eb097d81499584a515807540e
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
-      74: 1827226128182048838
-    second: Take 001
+      74: 4523737202199915946
+    second: HumanArmature|Man_Clapping
+  - first:
+      74: -3916294550958455020
+    second: HumanArmature|Man_Death
+  - first:
+      74: 8106746524365628829
+    second: HumanArmature|Man_Idle
+  - first:
+      74: -6398272582352398571
+    second: HumanArmature|Man_Jump
+  - first:
+      74: 4607071556537973139
+    second: HumanArmature|Man_Punch
+  - first:
+      74: 7354251634412414196
+    second: HumanArmature|Man_Run
+  - first:
+      74: 1443013137757961451
+    second: HumanArmature|Man_RunningJump
+  - first:
+      74: -6153676157489181926
+    second: HumanArmature|Man_Sitting
+  - first:
+      74: -9164212156404960148
+    second: HumanArmature|Man_Standing
+  - first:
+      74: 3655391794997471651
+    second: HumanArmature|Man_SwordSlash
+  - first:
+      74: 1555546630585696353
+    second: HumanArmature|Man_Walk
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -34,40 +64,11 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Take 001
-      takeName: Take 001
-      internalID: 0
-      firstFrame: 1
-      lastFrame: 29
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 1
+    clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1.5
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -108,7 +109,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -120,7 +121,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1.5
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
