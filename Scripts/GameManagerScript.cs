@@ -9,10 +9,20 @@ public class WishlistItem
 {
     public string itemName;
     public int itemCost;
+    public bool isPurchased;
     public WishlistItem(string _name, int _cost)
     {
         itemName = _name;
         itemCost = _cost;
+        if(PlayerPrefs.GetInt(_name, 0) == 0)
+        {
+
+            isPurchased = false;
+        }
+        else
+        {
+            isPurchased = false;
+        }
     }
 }
 
@@ -31,6 +41,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] GameObject mainMenuUI;
     [SerializeField] GameObject difficultyMenuUI;
     [SerializeField] GameObject pauseMenuUI;
+    [SerializeField] GameObject creditScreen;
 
     [SerializeField] GameObject confirmExitUI;//exit the program option
     [SerializeField] GameObject confirmQuitUI;//quit to menu option
@@ -140,13 +151,6 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-    public void CancelStartNewGame()
-    {
-        mainMenuUI.SetActive(true);
-        confirmStartNewGame.SetActive(false);
-    }
-
-
     public void ConfirmStartNewGame()
     {
         confirmStartNewGame.SetActive(false);
@@ -173,9 +177,22 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
+
+    public void CreditScreen()
+    {
+        mainMenuUI.SetActive(false);
+        creditScreen.SetActive(true);
+    }
+
+
     public void BackToMainMenu()
     {
+        creditScreen.SetActive(false);
+        confirmExitUI.SetActive(false);
+        confirmQuitUI.SetActive(false);
+        confirmStartNewGame.SetActive(false);
         difficultyMenuUI.SetActive(false);
+
         mainMenuUI.SetActive(true);
     }
 
@@ -214,6 +231,8 @@ public class GameManagerScript : MonoBehaviour
 
 
 
+
+
     public void QueryQuitGame()
     {
         pauseMenuUI.SetActive(false);
@@ -223,13 +242,6 @@ public class GameManagerScript : MonoBehaviour
     public void ConfirmQuitGame()
     {
         SceneManager.LoadScene(0);//reloads the scene
-    }
-
-
-    public void CancelQuitGame()
-    {
-        confirmQuitUI.SetActive(false);
-        pauseMenuUI.SetActive(true);
     }
 
 
@@ -248,12 +260,6 @@ public class GameManagerScript : MonoBehaviour
     public void ConfirmExitProgram()
     {
         Application.Quit();
-    }
-
-    public void CancelExitProgram()
-    {
-        mainMenuUI.SetActive(true);
-        confirmExitUI.SetActive(false);
     }
 
 
