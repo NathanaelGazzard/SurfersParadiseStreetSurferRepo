@@ -28,16 +28,8 @@ public class PedestrianTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //check is outside player view + minsafedistance
-
-
-
-
         switch (state)
         {
-            case 4:
-                Frozen();//this is used if the ai is out of the players view (with a buffer of like, 30%) and a reasonable distance away.
-                break;
             case 3:
                 ChasePlayer();
                 break;
@@ -106,12 +98,6 @@ public class PedestrianTest : MonoBehaviour
             phoneBreakLength = Random.Range(3, 9);
             state = 1;
         }
-    }
-
-
-    void Frozen()
-    {
-
     }
 
 
