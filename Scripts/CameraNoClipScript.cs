@@ -36,7 +36,7 @@ public class CameraNoClipScript : MonoBehaviour
         {
             RaycastHit hit;
             Vector3 dirTmp = parentTransform.TransformPoint(defaultPos) - referenceTransform.position;
-            if (Physics.SphereCast(referenceTransform.position, collisionOffset, dirTmp, out hit, defaultDistance))
+            if (Physics.SphereCast(referenceTransform.position, collisionOffset, dirTmp, out hit, defaultDistance) && !hit.transform.CompareTag("Pedestrian"))
             {
                 currentPos = (directionNormalized * (hit.distance - collisionOffset));
 

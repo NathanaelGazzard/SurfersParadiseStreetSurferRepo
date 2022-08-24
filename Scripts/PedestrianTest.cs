@@ -6,6 +6,14 @@ using UnityEngine.AI;
 public class PedestrianTest : MonoBehaviour
 {
     // >>> figure out way to constrain actor to a limited distance from their spawn location
+    // >>> punch is not activating
+    // >>> the falling animation makes the character fall through the floor. Maybe raise the model container during this anim?
+    [SerializeField] GameObject[] pedestrianModels;
+    int modelToUse;
+    float walkType;
+    float runType;
+
+    Animator modelAnimator;
 
     Transform playerRef;
     Vector3 destination;
@@ -13,7 +21,7 @@ public class PedestrianTest : MonoBehaviour
     [SerializeField] float minWalkDist;
     [SerializeField] float maxWalkDist;
 
-    float chaseDist = 10f;
+    float chaseDist = 50f;
 
     float defaultWalkSpeed;
 
@@ -21,7 +29,7 @@ public class PedestrianTest : MonoBehaviour
     float delayLength;
     int state = 0; //set up enum for the states (Walking, resting, knocked, chasing, frozen)
 
-    bool hasBeenHitByPlayer = false; //this bool is here to use if I want AI memory. Eg, if the player has previously hit them, the AI might yell if they get close and may even start chasing again
+    bool holdsGrudge = false; //this bool is here to use if I want AI memory. Eg, if the player has previously hit them, the AI might yell if they get close and may even start chasing again
 
 
     // Start is called before the first frame update
@@ -30,11 +38,21 @@ public class PedestrianTest : MonoBehaviour
         defaultWalkSpeed = myNavAgent.speed;
         NewDestination();
         myNavAgent.SetDestination(destination);
+
+        modelToUse = Random.Range(0, pedestrianModels.Length);
+        pedestrianModels[modelToUse].SetActive(true);
+        walkType = Random.Range(0, 1);
+        runType = Random.Range(0, 1);
+
+        modelAnimator = pedestrianModels[modelToUse].GetComponent<Animator>();
+        modelAnimator.SetFloat("WalkType", walkType);
+        modelAnimator.SetFloat("RunType", runType);
     }
 
     // Update is called once per frame
     void Update()
     {
+        print(state);
         switch (state)
         {
             case 3:
@@ -75,9 +93,10 @@ public class PedestrianTest : MonoBehaviour
 
     void PhoneBreak()
     {
-        print("waiting");
+        modelAnimator.SetTrigger("CheckPhone");
         if (DelayCheck())
         {
+            modelAnimator.ResetTrigger("CheckPhone");
             NewDestination();
             state = 0;
         }
@@ -88,8 +107,8 @@ public class PedestrianTest : MonoBehaviour
     {
         if (DelayCheck())
         {
-            //start chase animation
-            delayLength = 1;//this will determine how frequently the pedestrian will recalculate their path. The lower the value, the more accurately it will track the player but at the cost of performance
+            delayTimer = 0;
+            delayLength = 0.5f;//this will determine how frequently the pedestrian will recalculate their path. The lower the value, the more accurately it will track the player but at the cost of performance
             myNavAgent.speed = 5;
             state = 3;
         }
@@ -98,24 +117,28 @@ public class PedestrianTest : MonoBehaviour
 
     void ChasePlayer()
     {
+        //checks players position each second
         if (DelayCheck())
         {
             delayTimer = 0;
             myNavAgent.SetDestination(playerRef.position);
         }
 
+
         float distToPlayer = Vector3.Distance(transform.position, playerRef.position);
 
         if (distToPlayer > chaseDist)
         {
+            modelAnimator.SetTrigger("StopChasing");
             myNavAgent.speed = defaultWalkSpeed;
             myNavAgent.SetDestination(destination);
             state = 0;
-        }else if(distToPlayer < 1)
+        }
+        else if(distToPlayer < 1.5f)
         {
+            modelAnimator.SetTrigger("Punch");
             delayTimer = 0;
-            delayLength = 1.5f;
-            //play punch anim from here (not from punching function)
+            delayLength = 0.3f;
             PunchingPlayer();
         }
     }
@@ -128,7 +151,7 @@ public class PedestrianTest : MonoBehaviour
         if (Vector3.Distance(transform.position, destination) < 2)
         {
             delayTimer = 0;
-            delayLength = Random.Range(3, 9);
+            delayLength = 4;
             state = 1;
         }
     }
@@ -136,24 +159,23 @@ public class PedestrianTest : MonoBehaviour
 
     void PunchingPlayer()
     {
-        if (DelayCheck())
-        {
-            myNavAgent.speed = defaultWalkSpeed;
-            myNavAgent.SetDestination(destination);
-            state = 0;
-        }
+        myNavAgent.speed = defaultWalkSpeed;
+        myNavAgent.SetDestination(destination);
+        state = 0;
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && state < 2)
         {
-            hasBeenHitByPlayer = true;
+            myNavAgent.speed = 0;
+            modelAnimator.SetTrigger("FallDown");
+            holdsGrudge = true;
             playerRef = other.transform;
-            //play knocked over anim
-            delayLength = 3; //make this the length of the knocked over anim
+            delayLength = 4.9f; //lenght of the fall down and standup anims combined
             delayTimer = 0;
+            state = 2;
         }
     }
 
@@ -178,8 +200,5 @@ public class PedestrianTest : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, maxWalkDist);
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(myNavAgent.destination, 2);
     }
 }
