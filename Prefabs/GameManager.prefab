@@ -8555,7 +8555,7 @@ MonoBehaviour:
   confirmExitUI: {fileID: 4940209081566576924}
   confirmQuitUI: {fileID: 4940209082649031077}
   confirmStartNewGame: {fileID: 4940209081596761866}
-  character: {fileID: 6893908623236878228}
+  playerRef: {fileID: 6893908623236878228}
   flyover: {fileID: 4940209081654340681}
   wishlistButtonLabels:
   - {fileID: 4940209081297724651}
