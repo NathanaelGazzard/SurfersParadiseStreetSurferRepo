@@ -96,7 +96,6 @@ public class CharacterControllerScript : MonoBehaviour
             previousPos = transform.position;
         }
 
-
         BoostDecay();
     }
 
@@ -227,5 +226,12 @@ public class CharacterControllerScript : MonoBehaviour
     {
         //add screen blur around edges relative to boost speed
         //change fov relative to boost speed
+    }
+
+
+
+    public void Wasted()
+    {
+
     }
 }

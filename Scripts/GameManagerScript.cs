@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
+
+// defined a wishlist item object. 
 public class WishlistItem
 {
     public string itemName;
@@ -47,8 +49,8 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] GameObject confirmQuitUI;//quit to menu option
     [SerializeField] GameObject confirmStartNewGame;
 
-    [SerializeField] GameObject character;
-    [SerializeField] GameObject flyover;
+    [SerializeField] GameObject playerRef;
+    [SerializeField] GameObject flyover; // the seagul that flys over the scene
 
 
     bool isPlaying = false;
@@ -65,7 +67,7 @@ public class GameManagerScript : MonoBehaviour
     void Start()
     {
         InitWishlist();
-        character.SetActive(false);
+        playerRef.SetActive(false);
         flyover.SetActive(true);
         mainMenuUI.SetActive(true);
         menuBackDropUI.SetActive(true);
@@ -79,8 +81,10 @@ public class GameManagerScript : MonoBehaviour
         InitialiseMissions();
     }
 
+    
     void InitWishlist()
     {
+        // SUPER IMPORTANT: THE SAVE FUNCTIONALITY WILL NOT WORK UNLESS ALL THESE ITEMS HAVE UNIQUE NAMES
         wishlistItems[0] = new WishlistItem("NASSICA Yacht", 3206000);
         wishlistItems[1] = new WishlistItem("Lamborghini Countach", 2600000);
         wishlistItems[2] = new WishlistItem("Something Expensive", 2400000);
@@ -94,6 +98,7 @@ public class GameManagerScript : MonoBehaviour
         wishlistItems[10] = new WishlistItem("Something Expensive", 10000);
         wishlistItems[11] = new WishlistItem("Something Expensive", 5000);
     }
+
 
 
     // Update is called once per frame
@@ -117,25 +122,10 @@ public class GameManagerScript : MonoBehaviour
 
 
 
+    
 
 
-
-
-    void Wasted()
-    {
-        //play deathcam sequence
-
-        Invoke("ConfirmQuitGame", 5f);//set this delay to whatever is suitable to allow the deathcam sequence
-    }
-
-
-
-
-
-
-
-
-    //>>>>>>>>>>>>>>>>>> All the following functions are to be called by buttons in the menus.
+    //All the following functions are to be called by buttons in the menus.
     
     public void Continue()
     {
@@ -161,13 +151,14 @@ public class GameManagerScript : MonoBehaviour
 
     public void BeginGame(int itemRefNumber)
     {
-        //set some gameplay vars from the params
+        // >>> set some gameplay vars from the relevent wishlist item
+
         menuBackDropUI.SetActive(false);
         difficultyMenuUI.SetActive(false);
         gameplayUI.SetActive(true);
 
         flyover.SetActive(false);
-        character.SetActive(true);
+        playerRef.SetActive(true);
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -175,7 +166,6 @@ public class GameManagerScript : MonoBehaviour
 
         currentObjective = wishlistItems[itemRefNumber];
     }
-
 
 
     public void CreditScreen()
@@ -197,31 +187,24 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-
-
-
     public void PauseGame()
     {
-        character.GetComponent<CharacterController>().enabled = false;
+        playerRef.GetComponent<CharacterController>().enabled = false;
         gameplayUI.SetActive(false);
         pauseMenuUI.SetActive(true);
         menuBackDropUI.SetActive(true);
         isPaused = true;
-        //disable cam controller
         Cursor.lockState = CursorLockMode.Confined;
     }
 
 
-
     public void ResumeGame()
     {
-        print("unpause");
-        character.GetComponent<CharacterController>().enabled = true;
+        playerRef.GetComponent<CharacterController>().enabled = true;
         pauseMenuUI.SetActive(false);
         menuBackDropUI.SetActive(false);
         gameplayUI.SetActive(true);
         isPaused = false;
-        //re-enable cam controller
         Cursor.lockState = CursorLockMode.Locked;
     }
 
