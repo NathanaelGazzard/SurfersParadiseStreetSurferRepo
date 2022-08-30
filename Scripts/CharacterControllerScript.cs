@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterControllerScript : MonoBehaviour
 {
-    //IMPLEMENT ANIMATION CONTROLS
+    // PLAYER STILL SNAPPING TO ODD POSITIONS WHEN HITCHIKING
     // ADD CAMERA ZOOM CHANGE BASED ON SPEED
 
 
@@ -29,7 +29,7 @@ public class CharacterControllerScript : MonoBehaviour
 
     [SerializeField] float normalMoveSpeed; //players skating speed
     float currentSpeedBoost; //when the player lets go of a moving vehicle, this will be set to the speed of the vehicle and will then decay over time
-    [SerializeField] float boostDecayRate = 0.5f; //rate that the boost speed will reduce
+    [SerializeField] float boostDecayRate = 0.4f; //rate that the boost speed will reduce
 
     bool isJumping = false;
     [SerializeField] float jumpSpeed = 5f;
@@ -46,7 +46,6 @@ public class CharacterControllerScript : MonoBehaviour
     void Start()
     {
         characterControllerRef = GetComponent<CharacterController>();
-        camNoClipScriptRef = GetComponent<CameraNoClipScript>();
         currentSpeedBoost = 0f;
         turnRot = transform.rotation.y;
         rollRot = 45f;
@@ -76,7 +75,7 @@ public class CharacterControllerScript : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0) && carInRange)
             {
                 isHitchHiking = true;
-                hitchHikerCarOffset = hitcHikerCar.transform.position - transform.position;//this value seems to be fine - the offset issues seem to come from implementation
+                hitchHikerCarOffset = hitcHikerCar.transform.position - transform.position;
                 previousPos = transform.position;
             }
             MovementControls();
@@ -86,7 +85,7 @@ public class CharacterControllerScript : MonoBehaviour
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                transform.position = hitcHikerCar.transform.TransformPoint(-hitchHikerCarOffset);//hitcHikerCar.transform.position + hitchHikerCarOffset;
+                transform.position = hitcHikerCar.transform.TransformPoint(hitchHikerCarOffset);// >>> should it be -hitchHikerCarOffset
                 currentSpeedBoost = (transform.position - previousPos).magnitude * 1.1f / Time.deltaTime;//boost when you let go of a car is actually slightly faster than the car
             }
             else
