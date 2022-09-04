@@ -38,6 +38,11 @@ public class CarScript : MonoBehaviour
         }
     }
 
+    public void SetInitialDestination(Transform initNode)
+    {
+        destinationNode = initNode;
+    }
+
 
 
     private void FixedUpdate()
