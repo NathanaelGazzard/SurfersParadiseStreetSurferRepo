@@ -12,7 +12,9 @@ public class CarSpawnPointScript : MonoBehaviour
     {
         int carToSpawn = Random.Range(0, carPrefabs.Length);
         GameObject newCar = GameObject.Instantiate(carPrefabs[carToSpawn]);
-        Transform initNode = GetComponent<TrafficNodeScript>().RequestNextNode();
+        Transform initNode = GetComponentInParent<TrafficNodeScript>().RequestNextNode();
         newCar.GetComponent<CarScript>().SetInitialDestination(initNode);
+        newCar.transform.position = transform.position;
+        newCar.transform.eulerAngles = transform.parent.eulerAngles;
     }
 }
