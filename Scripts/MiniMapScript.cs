@@ -5,7 +5,6 @@ using UnityEngine;
 public class MiniMapScript : MonoBehaviour
 {
     [SerializeField] Vector3 offsetValue;
-    [SerializeField] Vector3 mainMapPos;
 
     [SerializeField] Transform playerCamRootRef;
 
@@ -17,7 +16,7 @@ public class MiniMapScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = mainMapPos + offsetValue; // sets the duplicate map to its offset location
+        transform.position += offsetValue; // sets the duplicate map to its offset location
         camHeight = cameraRef.position.y;
     }
 
