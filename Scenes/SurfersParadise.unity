@@ -5563,7 +5563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8315846326569597624, guid: 3d1cfe0ffc29df34c95aea469368a9fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 101.5224
+      value: -39
       objectReference: {fileID: 0}
     - target: {fileID: 8315846326569597624, guid: 3d1cfe0ffc29df34c95aea469368a9fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -26118,7 +26118,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offsetValue: {x: -20000, y: 0, z: 0}
-  mainMapPos: {fileID: 1724809337}
   playerCamRootRef: {fileID: 780053976}
   cameraRef: {fileID: 2079862678}
 --- !u!4 &1630903819
@@ -27483,11 +27482,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4631891537778504, guid: b0bb4b9691721cf4791e1124d867edd8, type: 3}
   m_PrefabInstance: {fileID: 1280080930}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1724809337 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8315846326569597624, guid: 3d1cfe0ffc29df34c95aea469368a9fd, type: 3}
-  m_PrefabInstance: {fileID: 208740064}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1725643800 stripped
 Transform:
@@ -34795,6 +34789,10 @@ PrefabInstance:
     - target: {fileID: 4940209082045925413, guid: 184e371992c05a941aa31aaf7b879943, type: 3}
       propertyPath: m_Name
       value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4940209082045925413, guid: 184e371992c05a941aa31aaf7b879943, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4940209082045925415, guid: 184e371992c05a941aa31aaf7b879943, type: 3}
       propertyPath: m_RootOrder
