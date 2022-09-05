@@ -71,14 +71,13 @@ public class GameManagerScript : MonoBehaviour
         flyover.SetActive(true);
         mainMenuUI.SetActive(true);
         menuBackDropUI.SetActive(true);
+
         Cursor.lockState = CursorLockMode.Confined;
 
         for (int i = 0; i < wishlistButtonLabels.Length; i++)
         {
             wishlistButtonLabels[i].text = wishlistItems[i].itemName + " - $" + wishlistItems[i].itemCost + ".00";
         }
-
-        InitialiseMissions();
     }
 
     
@@ -249,8 +248,5 @@ public class GameManagerScript : MonoBehaviour
 
 
 
-    public void InitialiseMissions()
-    {
-        MissionGeneration ms = new MissionGeneration("SUS");
-    }
+ 
 }
