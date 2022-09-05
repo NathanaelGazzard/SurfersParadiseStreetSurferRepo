@@ -20,9 +20,6 @@ public class Eshay : MonoBehaviour
     float lowerRange = 10.0f;
     float upperRange = 30.0f;
     float outOfRange = 45.0f;
-    float walkSpeed = 2.0f;
-    float sprintSpeed = 5.0f;
-    bool warningGiven = false;
     int numOfWarnings = 2;
     float timeSinceWarning = 0.0f;
     bool wasInClose = false;
