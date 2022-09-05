@@ -8,29 +8,48 @@ using UnityEngine;
 public class MissionGeneration : MonoBehaviour
 {
     Mission currentMission;
-    GameObject[] missionPickUpPoints;
-    GameObject[] missionDropOffPoints;
+    // Points can be pickup or drop off, each mission point will have some description about them
+    // Since this is story mission, it will be there name etc
+    [SerializeField] GameObject[] missionPoints;
+    List<int> pointsTaken = new List<int>();
 
-    GameObject[] rndMissionPickUpPoints;
-    Mission[] storyMissions;
+    [SerializeField] GameObject[] rndMissionPickUpPoints;
+    List<Mission> storyMissions = new List<Mission>();
+    protected int numerOfMissions = 3;
 
-    public MissionGeneration(string m)
+    public void Start()
     {
-        Debug.Log("Initialised Mission generaiton: " + m);
+        // 3 story missions
+        for (int i = 0; i < numerOfMissions; i++)
+        {
+            GenerateStoryMissionLocations();
+        }
+        SetMission(1);
     }
 
-    public  Mission GenerateStoryMission()
+    public void SetMission(int x)
     {
-        // On generation, it will communicate with these pick/drop points and make them a mission pick/drop
-        GameObject pickUp = generatePointLocation(missionPickUpPoints);
-        GameObject dropOff = generatePointLocation(missionDropOffPoints);
+        // Will become user selection (testing cur)
+        gameObject.GetComponent<PlayerInteraction>().SendMessage("SetCurMissionID", x);
+        Debug.Log("Set mission to: " + x.ToString());
+    }
+
+    public void GenerateStoryMissionLocations()
+    {
+        // Distance function implemented later on
+
+        MissionInteractable pickUp = generatePointLocation(missionPoints);
+        MissionInteractable dropOff = generatePointLocation(missionPoints, "SetAsDropOff");
+        Debug.Log("Created mission, id: " + (storyMissions.Count).ToString());
 
         // some randomised function to generate these values
-        int r = 1000;
-        string item = "Cory Cigaretes";
-        string delInst = "Deliver to Cory at x location";
-        Mission generatedMission = new Mission(r, item, delInst);
-        return generatedMission;
+        int reward = 1000;
+        string item = "Some item";
+        // not as random, as we can use the MissionInteraction values to keep location and people the same 
+        // for future speed runners, know where to go when we mention person x at location y
+        string delInst = "Deliver " + item + pickUp.GetLocation();
+        Mission generatedMission = new Mission(reward, item, delInst);
+        storyMissions.Add(generatedMission);
     }
 
     public void GenerateRandomMissions()
@@ -43,8 +62,24 @@ public class MissionGeneration : MonoBehaviour
         // a rndMissionPickUpPoint can be suspicious shrooms or rnd weed
     }
 
-    public GameObject generatePointLocation(GameObject[] points)
+    MissionInteractable generatePointLocation(GameObject[] points, string call="SetAsPickUp")
     {
-        return points[Random.Range(0, points.Length)];
+        int x;
+        while (true)
+        {
+            x = Random.Range(0, points.Length);
+            if (pointsTaken.IndexOf(x) < 0) 
+            {
+                break;
+            }
+        }
+        pointsTaken.Add(x);
+
+        MissionInteractable point = points[x].GetComponentInChildren<MissionInteractable>();
+        // Will need a mission number, which will be index based
+        // but when set will be able to define which points are linked
+        // adds to both pick/drop, before it gets added to Missionpoints in GenerateStoryMissionLocations()
+        point.SendMessage(call, (storyMissions.Count).ToString());
+        return point;
     }
 }

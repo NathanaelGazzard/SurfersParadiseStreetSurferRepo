@@ -45,6 +45,7 @@ public class CharacterControllerScript : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         characterControllerRef = GetComponent<CharacterController>();
         camNoClipScriptRef = GetComponent<CameraNoClipScript>();
         currentSpeedBoost = 0f;
@@ -206,11 +207,13 @@ public class CharacterControllerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Car") && !isHitchHiking)
-        {
-            carInRange = true;
-            hitcHikerCar = other.gameObject;
-        }
+        //if (other.CompareTag("Car") && !isHitchHiking)
+        //{
+            //carInRange = true;
+            //hitcHikerCar = other.gameObject;
+        //}
+
+        //
     }
 
     private void OnTriggerExit(Collider other)
