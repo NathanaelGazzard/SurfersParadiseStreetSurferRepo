@@ -133,6 +133,7 @@ MonoBehaviour:
   referenceTransform: {fileID: 6792849212672172932}
   collisionOffset: 0.3
   cameraZoomSpeed: 15
+  disableNoClip: 0
 --- !u!1 &6792849211773862690
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +145,7 @@ GameObject:
   - component: {fileID: 6792849211773862701}
   - component: {fileID: 6792849211773862702}
   - component: {fileID: 6792849211773862703}
-  - component: {fileID: 6792849211773862696}
+  - component: {fileID: 3506441953437772162}
   m_Layer: 0
   m_Name: Character_Anim
   m_TagString: Player
@@ -182,6 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelRef: {fileID: 6412396294002799302}
+  camNoClipScriptRef: {fileID: 6792849211044476813}
   viewModelRotSpeed: 20
   carInRange: 0
   cameraArmRef: {fileID: 6792849212672172955}
@@ -208,8 +210,8 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!65 &6792849211773862696
-BoxCollider:
+--- !u!135 &3506441953437772162
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -219,8 +221,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 1, z: 1.5}
-  m_Center: {x: 0, y: 1, z: 0.75}
+  m_Radius: 1.69
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &6792849212577857868
 GameObject:
   m_ObjectHideFlags: 0
