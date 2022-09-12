@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterControllerScript : MonoBehaviour
 {
@@ -43,6 +44,12 @@ public class CharacterControllerScript : MonoBehaviour
 
     Vector3 previousPos;
 
+    bool controlsEnabled = true;
+
+    int playerhealth = 100;
+    [SerializeField] GameObject playerRagdoll;
+    [SerializeField] GameObject deathUI;
+
     void Start()
     {
         characterControllerRef = GetComponent<CharacterController>();
@@ -54,54 +61,70 @@ public class CharacterControllerScript : MonoBehaviour
 
     void Update()
     {
-        if(currentSpeedBoost > 0)
+        if (controlsEnabled)
         {
-            //if the player has much boost, the camera noClip is disabled and the camera distance is lock fairly close. This prevents camera rubberbanding at high speeds.
-            if (currentSpeedBoost > 10f)
+            if (currentSpeedBoost > 0)
             {
-                camNoClipScriptRef.disableNoClip = true;
+                //if the player has much boost, the camera noClip is disabled and the camera distance is lock fairly close. This prevents camera rubberbanding at high speeds.
+                if (currentSpeedBoost > 10f)
+                {
+                    camNoClipScriptRef.disableNoClip = true;
+                }
+                else
+                {
+                    camNoClipScriptRef.disableNoClip = false;
+                }
+                SpeedScreenDistortion();
+            }
+
+
+
+            if (!isHitchHiking)
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse0) && carInRange)
+                {
+                    isHitchHiking = true;
+                    hitchHikerCarOffset = hitcHikerCar.transform.position - transform.position;
+                    previousPos = transform.position;
+                }
+                MovementControls();
             }
             else
             {
-                camNoClipScriptRef.disableNoClip = false;
-            }
-            SpeedScreenDistortion();
-        }
 
-
-
-        if (!isHitchHiking)
-        {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && carInRange)
-            {
-                isHitchHiking = true;
-                hitchHikerCarOffset = hitcHikerCar.transform.position - transform.position;
+                if (Input.GetKey(KeyCode.Mouse0))
+                {
+                    transform.position = hitcHikerCar.transform.TransformPoint(hitchHikerCarOffset);// >>> should it be -hitchHikerCarOffset
+                    currentSpeedBoost = (transform.position - previousPos).magnitude * 1.1f / Time.deltaTime;//boost when you let go of a car is actually slightly faster than the car
+                }
+                else
+                {
+                    isHitchHiking = false;
+                }
                 previousPos = transform.position;
             }
-            MovementControls();
-        }
-        else
+
+            BoostDecay();
+        } 
+        
+        if (controlsEnabled && playerhealth <= 0)
         {
-
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                transform.position = hitcHikerCar.transform.TransformPoint(hitchHikerCarOffset);// >>> should it be -hitchHikerCarOffset
-                currentSpeedBoost = (transform.position - previousPos).magnitude * 1.1f / Time.deltaTime;//boost when you let go of a car is actually slightly faster than the car
-            }
-            else
-            {
-                isHitchHiking = false;
-            }
-            previousPos = transform.position;
+            Wasted();
         }
-
-        BoostDecay();
     }
+
+
 
     void LateUpdate()
     {
-        CameraControls();
+        if (controlsEnabled)
+        {
+            CameraControls();
+        }
     }
+
+
+
 
     void MovementControls()
     {
@@ -229,8 +252,29 @@ public class CharacterControllerScript : MonoBehaviour
 
 
 
-    public void Wasted()
+    public void ModifyHealth(int healthChangeAmount)
     {
+        playerhealth += healthChangeAmount;
+    }
 
+
+    void Wasted()
+    {
+        controlsEnabled = false;
+        viewModelRef.SetActive(false);
+        cameraRef.SetActive(false);
+        playerRagdoll.SetActive(true);
+        Time.timeScale = 0.3f;
+        deathUI.SetActive(true);
+
+        // >>> THIS IS A TEMP FUNCTION >>>
+        Invoke("ReloadCurrentScene", 6);
+    }
+
+
+    void ReloadCurrentScene()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

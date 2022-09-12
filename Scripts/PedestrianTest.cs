@@ -38,6 +38,8 @@ public class PedestrianTest : MonoBehaviour
 
     bool holdsGrudge = false; // this bool is here to use if we want AI memory. Eg, if the player has previously hit them, the AI might yell if they get too close in future and may even start chasing again
 
+    bool hasPunched = false; // this will be used to prevent the pedestrian from being "hit" by the player the moment their state transitions after punching the player
+
 
 
     void Start()
@@ -154,11 +156,19 @@ public class PedestrianTest : MonoBehaviour
             modelAnimator.SetTrigger("Punch");
             delayTimer = 0;
             delayLength = 0.3f;
-            playerRef.GetComponent<CharacterControllerScript>().Wasted();
             myNavAgent.speed = defaultWalkSpeed;
             myNavAgent.SetDestination(destination);
+            hasPunched = true;
             state = 0;
+            Invoke("DelayedAttackOutput", 0.4f);
         }
+    }
+
+    
+    //this exists so that the player receives damage when the punch anim plays out, rather than being called immidiately
+    void DelayedAttackOutput()
+    {
+        playerRef.GetComponent<CharacterControllerScript>().ModifyHealth(-100);
     }
 
 
@@ -179,7 +189,7 @@ public class PedestrianTest : MonoBehaviour
     // is the player bumps into the pedestrian, they will get real angry
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && state < 2)
+        if (other.CompareTag("Player") && state < 2 && !hasPunched)
         {
             myNavAgent.speed = 0; // cannot move while staggered
             modelAnimator.SetTrigger("Knocked");

@@ -189,11 +189,11 @@ public class GameManagerScript : MonoBehaviour
 
     public void PauseGame()
     {
-        playerRef.GetComponent<CharacterController>().enabled = false;
         gameplayUI.SetActive(false);
         pauseMenuUI.SetActive(true);
         menuBackDropUI.SetActive(true);
         isPaused = true;
+        Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
     }
 
@@ -205,6 +205,7 @@ public class GameManagerScript : MonoBehaviour
         menuBackDropUI.SetActive(false);
         gameplayUI.SetActive(true);
         isPaused = false;
+        Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
