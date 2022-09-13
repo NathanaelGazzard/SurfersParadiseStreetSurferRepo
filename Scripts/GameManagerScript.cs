@@ -268,5 +268,15 @@ public class GameManagerScript : MonoBehaviour
     {
         currentCash += amountReceived;
         goalProgressText.text = "$" + currentCash.ToString() + " / $" + goalCost.ToString(); 
+        if(currentCash >= goalCost)
+        {
+            PlayerWon();
+        }
+    }
+
+
+    void PlayerWon()
+    {
+        //uhm, activate the win sequence
     }
 }
