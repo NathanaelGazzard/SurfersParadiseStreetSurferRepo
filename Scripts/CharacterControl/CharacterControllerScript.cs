@@ -49,6 +49,9 @@ public class CharacterControllerScript : MonoBehaviour
     int playerhealth = 100;
     [SerializeField] GameObject playerRagdoll;
     [SerializeField] GameObject deathUI;
+    [SerializeField] GameObject gameplayUI;
+
+    [SerializeField] GameObject drownedCharacterModel;
 
     void Start()
     {
@@ -110,6 +113,11 @@ public class CharacterControllerScript : MonoBehaviour
         if (controlsEnabled && playerhealth <= 0)
         {
             Wasted();
+        }
+
+        if(transform.position.y <= 0)
+        {
+            Drowned();
         }
     }
 
@@ -266,6 +274,25 @@ public class CharacterControllerScript : MonoBehaviour
         playerRagdoll.SetActive(true);
         Time.timeScale = 0.3f;
         deathUI.SetActive(true);
+        gameplayUI.SetActive(false);
+
+
+        // >>> THIS IS A TEMP FUNCTION >>>
+        Invoke("ReloadCurrentScene", 6);
+    }
+
+
+    void Drowned()
+    {
+        //if player falls below water level:
+        controlsEnabled = false;
+        viewModelRef.SetActive(false);
+        cameraRef.SetActive(false);
+        drownedCharacterModel.SetActive(true);
+        drownedCharacterModel.transform.position = new Vector3(drownedCharacterModel.transform.position.x, 0.8f, drownedCharacterModel.transform.position.z);
+        Time.timeScale = 0.3f;
+        deathUI.SetActive(true);
+        gameplayUI.SetActive(false);
 
         // >>> THIS IS A TEMP FUNCTION >>>
         Invoke("ReloadCurrentScene", 6);
