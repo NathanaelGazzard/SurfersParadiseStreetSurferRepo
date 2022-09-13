@@ -61,6 +61,10 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] wishlistButtonLabels = new TextMeshProUGUI[12];
     WishlistItem currentObjective;
 
+    [SerializeField] Text goalProgressText;
+    int goalCost;
+    int currentCash = 0;
+
 
 
     // Start is called before the first frame update
@@ -165,6 +169,8 @@ public class GameManagerScript : MonoBehaviour
         isPlaying = true;
 
         currentObjective = wishlistItems[itemRefNumber];
+        goalCost = currentObjective.itemCost;
+        ReceiveMoney(0);
     }
 
 
@@ -225,6 +231,7 @@ public class GameManagerScript : MonoBehaviour
 
     public void ConfirmQuitGame()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);//reloads the scene
     }
 
@@ -253,5 +260,13 @@ public class GameManagerScript : MonoBehaviour
     public void InitialiseMissions()
     {
         MissionGeneration ms = new MissionGeneration("SUS");
+    }
+
+
+
+    public void ReceiveMoney(int amountReceived)
+    {
+        currentCash += amountReceived;
+        goalProgressText.text = "$" + currentCash.ToString() + " / $" + goalCost.ToString(); 
     }
 }
