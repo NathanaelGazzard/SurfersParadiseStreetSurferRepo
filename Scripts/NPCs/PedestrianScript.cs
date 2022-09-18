@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PedestrianTest : MonoBehaviour
+public class PedestrianScript : MonoBehaviour
 {
-    // >>> figure out way to constrain actor to a limited distance from their spawn location?
-
     [SerializeField] GameObject[] pedestrianModels; // each pedestrian contains all possible pedestrian models
     int modelToUse; // this is will be assigned via a random function and will determine which of the pedestrian models will be activated
 
@@ -24,7 +22,7 @@ public class PedestrianTest : MonoBehaviour
 
     Vector3 destination;
 
-    public Transform playerRef; // >>> set this up to be assigned by the pedestrian spawner
+    public Transform playerRef; // reference to player
 
     float chaseDist = 50f; // the max distance between the pedestrian and player before the pedestrian gives up on chasing the player
 
