@@ -115,7 +115,7 @@ public class CharacterControllerScript : MonoBehaviour
             Wasted();
         }
 
-        if(transform.position.y <= 0)
+        if(transform.position.y <= -1f)
         {
             Drowned();
         }
@@ -278,7 +278,7 @@ public class CharacterControllerScript : MonoBehaviour
 
 
         // >>> THIS IS A TEMP FUNCTION >>>
-        Invoke("ReloadCurrentScene", 6);
+        Invoke("ReloadCurrentScene", 3.8f);
     }
 
 
@@ -289,13 +289,13 @@ public class CharacterControllerScript : MonoBehaviour
         viewModelRef.SetActive(false);
         cameraRef.SetActive(false);
         drownedCharacterModel.SetActive(true);
-        drownedCharacterModel.transform.position = new Vector3(drownedCharacterModel.transform.position.x, 0.8f, drownedCharacterModel.transform.position.z);
+        drownedCharacterModel.transform.position = new Vector3(drownedCharacterModel.transform.position.x, -0.5f, drownedCharacterModel.transform.position.z);
         Time.timeScale = 0.3f;
         deathUI.SetActive(true);
         gameplayUI.SetActive(false);
 
         // >>> THIS IS A TEMP FUNCTION >>>
-        Invoke("ReloadCurrentScene", 6);
+        Invoke("ReloadCurrentScene", 3.8f);
     }
 
 

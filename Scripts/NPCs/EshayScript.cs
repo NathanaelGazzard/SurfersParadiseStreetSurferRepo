@@ -43,7 +43,7 @@ public class EshayScript : MonoBehaviour
     void Start()
     {
         GetComponent<SphereCollider>().radius = warningRange;
-        playerFOV = Camera.main.fieldOfView -10;
+        playerFOV = 50;
         defaultWalkSpeed = myNavAgent.speed;
         NewDestination();
         myNavAgent.SetDestination(destination);
