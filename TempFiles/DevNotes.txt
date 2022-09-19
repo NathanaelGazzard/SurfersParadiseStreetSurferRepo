@@ -12,6 +12,7 @@ Credits:
 	"Low-Poly Seagull Animated" (https://skfb.ly/6DpOO) by Jamie McFarlane is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). - flyover seagull
 	https://assetstore.unity.com/packages/tools/particles-effects/true-clouds-fog-mobile-pc-107379 - clouds
 	https://assetstore.unity.com/packages/2d/textures-materials/sky/free-stylized-skybox-212257 - skybox
+	https://www.youtube.com/watch?v=EwHiMQ3jdHw&t=108s - waypoints (traffic nodes)
 
 
 	Characters:

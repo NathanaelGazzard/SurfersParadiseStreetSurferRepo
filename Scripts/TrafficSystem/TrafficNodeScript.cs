@@ -2,34 +2,69 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TrafficNodeScript : MonoBehaviour
 {
-    [SerializeField] float speedLimit = 10;
+    [SerializeField] bool isBranch = false;
+    [SerializeField] Transform[] otherTrackNodes;
+    TrafficStripScript parentRef;
 
-    public Transform[] possibleNodes = new Transform[1]; //all the possible nodes a car can go to once it reaches this one
+    Transform[] branchNodes;
+
+    public float speedLimit;
 
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        parentRef = transform.parent.GetComponent<TrafficStripScript>();
+        if(transform.GetSiblingIndex()+1 >= transform.parent.childCount)
+        {
+            branchNodes = new Transform[1];
+            branchNodes[0] = parentRef.GetEndNode();
+        }
+        else if (isBranch)
+        {
+            if(otherTrackNodes == null)
+            {
+                print("Assign the other track nodes to " + gameObject.name + " Damnit!");
+            }
+            else
+            {
+                branchNodes = new Transform[otherTrackNodes.Length + 1];
+                branchNodes[0] = parentRef.GetNextNode(transform);
+                int i = 1;
+                foreach (Transform node in otherTrackNodes)
+                {
+                    branchNodes[i] = node;
+                    i++;
+                }
+            }
+        }
+        else
+        {
+            branchNodes = new Transform[1];
+            branchNodes[0] = parentRef.GetNextNode(transform);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public Transform ChooseCarDestination()
     {
-        
+        int nodeToChoose = Random.Range(0, branchNodes.Length);
+        return branchNodes[nodeToChoose];
     }
 
 
-    public Transform RequestNextNode()
+    private void OnDrawGizmos()
     {
-        Transform nextNode = possibleNodes[Random.Range(0, possibleNodes.Length)];
-        return nextNode;
+        if (isBranch)
+        {
+            foreach(Transform node in otherTrackNodes)
+            {
+                Gizmos.color = Color.white;
+                Gizmos.DrawLine(transform.position, node.position);
+            }
+        }
     }
 
-    public float GetSpeedLimit()
-    {
-        return speedLimit;
-    }
 }
