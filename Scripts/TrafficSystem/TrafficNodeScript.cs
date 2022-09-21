@@ -13,6 +13,21 @@ public class TrafficNodeScript : MonoBehaviour
 
     public float speedLimit;
 
+    public bool mustGiveWay = false;
+    int carsInZone = 0;
+
+
+    void Awake()
+    {
+        if (mustGiveWay || isBranch)
+        {
+            tag = "SpecTrafficNode";
+        }
+        else
+        {
+            tag = "TrafficNode";
+        }
+    }
 
     void Start()
     {
@@ -45,6 +60,18 @@ public class TrafficNodeScript : MonoBehaviour
             branchNodes = new Transform[1];
             branchNodes[0] = parentRef.GetNextNode(transform);
         }
+
+        if(mustGiveWay)
+        {
+            if(GetComponent<BoxCollider>() == null)
+            {
+                print("No triggers detecting the give way zones for " + gameObject.name);
+            }
+            else
+            {
+                GetComponent<BoxCollider>().isTrigger = true;
+            }
+        }
     }
 
 
@@ -65,6 +92,41 @@ public class TrafficNodeScript : MonoBehaviour
                 Gizmos.DrawLine(transform.position, node.position);
             }
         }
+        if (mustGiveWay)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.up * 5);
+        }
     }
 
+    
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Car"))
+        {
+            carsInZone++;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Car"))
+        {
+            carsInZone--;
+        }
+    }
+
+
+    public bool SafeToTurn()
+    {
+        if(carsInZone == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &739894196695477065
 Transform:
   m_ObjectHideFlags: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 25
-  startNode: {fileID: 0}
+  isTailgaiting: 0
   carModels:
   - {fileID: 1536569613587882188, guid: 62be07e9d73a2ef4882bf83aeb04e4ee, type: 3}
   - {fileID: 1536569613587882188, guid: 51498eedb3f34994bade42f857015116, type: 3}
@@ -95,7 +95,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 739894197019631722}
-  - component: {fileID: 1110775582}
+  - component: {fileID: 216799472424518556}
+  - component: {fileID: 7003778653744397374}
   m_Layer: 0
   m_Name: RotTarg
   m_TagString: Untagged
@@ -118,8 +119,8 @@ Transform:
   m_Father: {fileID: 739894196695477065}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &1110775582
-SphereCollider:
+--- !u!65 &216799472424518556
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -129,5 +130,17 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 8
-  m_Center: {x: 0, y: 0, z: 3}
+  m_Size: {x: 2.584011, y: 2.079361, z: 2.3110785}
+  m_Center: {x: 0.07105851, y: 1.4603195, z: 5.0767994}
+--- !u!114 &7003778653744397374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739894197019631723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bcc3f0e227360e4c960464ee021f15a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

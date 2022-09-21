@@ -5,40 +5,34 @@ using UnityEngine;
 public class CarFrontTriggerScript : MonoBehaviour
 {
     CarScript carScript;
-    Transform carInFront;
-    // Start is called before the first frame update
+    int carsInFront = 0;
+
+
+
     void Start()
     {
         carScript = transform.parent.GetComponent<CarScript>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
-
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (carInFront == null && other.CompareTag("Car"))
+        if (other.CompareTag("Car") && other.transform != transform.parent)
         {
-            if (carScript.CheckIfTailgating(other.transform))
-            {
-                carInFront = other.transform;
-            }
+            print(other.gameObject.name);
+            carsInFront++;
+            carScript.isTailgaiting = true;
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
-        if (other.transform == carInFront)
+        if (other.CompareTag("Car") && other.transform != transform.parent)
         {
-            carInFront = null;
-        }
-        {
-            if (carScript.CheckIfTailgating(other.transform))
+            carsInFront--;
+            if (carsInFront == 0)
             {
-                carInFront = other.transform;
+                carScript.isTailgaiting = false;
             }
         }
     }
