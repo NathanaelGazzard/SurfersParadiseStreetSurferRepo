@@ -19,11 +19,6 @@ public class CarScript : MonoBehaviour
 
     float timeStopped = 0;
 
-    float startHeight;
-
-
-    // ------------------------ VISUAL ELEMENTS ------------------------------------------------------------------
-
     [SerializeField] GameObject[] carModels;
     Transform carModel;
     [SerializeField] Transform rotTarg;
@@ -33,37 +28,52 @@ public class CarScript : MonoBehaviour
 
     bool isStuck = false;
 
+    bool playerInRange = false;
 
+    [SerializeField] bool isPolice;
+    [SerializeField] GameObject policeCarModel;
 
+    [Header("NPC Police Actor")]
+    [SerializeField] GameObject policeAIPrefab;
 
-
+    Transform playerRef;
 
 
 
 
     void Start()
     {
-        destinationNode = GetComponentInParent<CarSpawnScript>().GetStartNode();
-        transform.position = destinationNode.position;
-
-        startHeight = transform.position.y;
-        
-        destinationNode = destinationNode.GetComponent<TrafficNodeScript>().ChooseCarDestination();
-
-
-        // ------------------------ VISUAL ELEMENTS ------------------------------------------------------------------
-        int c = Random.Range(0, carModels.Length);
-        carModel = GameObject.Instantiate(carModels[c], transform).transform;
+        if (isPolice)
+        {
+            GetComponent<SphereCollider>().enabled = true;
+            carModel = GameObject.Instantiate(policeCarModel, transform).transform;
+        }
+        else
+        {
+            int c = Random.Range(0, carModels.Length);
+            carModel = GameObject.Instantiate(carModels[c], transform).transform;
+        }
         carModel.localPosition = Vector3.zero;
 
         rotTarg.LookAt(lookTarg);
         carModel.rotation = rotTarg.rotation;
+
+        destinationNode = GetComponentInParent<CarSpawnScript>().GetStartNode();
+        transform.position = destinationNode.position;
+        
+        destinationNode = destinationNode.GetComponent<TrafficNodeScript>().ChooseCarDestination();
     }
 
 
     void Update()
     {
-        if (isStuck)
+        if (playerInRange)
+        {
+            GameObject newPoliceCar = Instantiate(policeAIPrefab);
+            newPoliceCar.GetComponent<PoliceCarScript>().playerRef = playerRef;
+            Destroy(gameObject);
+        }
+        else if (isStuck)
         {
             transform.position += Vector3.up * 15 * Time.deltaTime;
             timeStopped += Time.deltaTime;
@@ -117,6 +127,23 @@ public class CarScript : MonoBehaviour
         if (!destinationNode.GetComponent<TrafficNodeScript>().mustGiveWay)
         {
             givingWay = true;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (isPolice && other.CompareTag("Player"))
+        {
+            playerInRange = true;
+            playerRef = other.transform;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (isPolice && other.CompareTag("Player"))
+        {
+            playerInRange = false;
         }
     }
 }

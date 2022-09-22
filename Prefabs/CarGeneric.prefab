@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 739894196695477065}
   - component: {fileID: 739894196695477064}
+  - component: {fileID: 1352041414314786612}
   m_Layer: 0
   m_Name: CarGeneric
   m_TagString: Untagged
@@ -86,6 +87,22 @@ MonoBehaviour:
   - {fileID: 1536569613587882188, guid: bd36456e046ca9b4fa25023d18e22ef7, type: 3}
   rotTarg: {fileID: 739894197019631722}
   turnSpeed: 300
+  isPolice: 0
+  policeCarModel: {fileID: 0}
+  policeAIPrefab: {fileID: 3084259115195860124, guid: e6e7511c868501a4e93b45046a6f3482, type: 3}
+--- !u!135 &1352041414314786612
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739894196695477066}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 12
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &739894197019631723
 GameObject:
   m_ObjectHideFlags: 0
