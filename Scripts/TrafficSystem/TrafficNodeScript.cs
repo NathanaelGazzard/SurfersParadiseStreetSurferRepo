@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TrafficNodeScript : MonoBehaviour
 {
+    Color nodeColor;
+    float nodeRadius;
     [SerializeField] bool isBranch = false;
     [SerializeField] Transform[] otherTrackNodes;
     TrafficStripScript parentRef;
@@ -82,8 +84,14 @@ public class TrafficNodeScript : MonoBehaviour
     }
 
 
-    private void OnDrawGizmos()
+    void OnDrawGizmos()
     {
+        nodeColor = GetComponentInParent<TrafficStripScript>().nodeColor;
+        nodeRadius = GetComponentInParent<TrafficStripScript>().nodeRadius;
+
+        Gizmos.color = nodeColor;
+        Gizmos.DrawSphere(transform.position, nodeRadius);
+
         if (isBranch)
         {
             foreach(Transform node in otherTrackNodes)

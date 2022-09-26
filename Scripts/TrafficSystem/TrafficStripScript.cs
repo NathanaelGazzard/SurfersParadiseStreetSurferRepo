@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TrafficStripScript : MonoBehaviour
 {
-    [SerializeField] Color nodeColour = Color.yellow;
+    public Color nodeColor = Color.yellow;
     [Range(0.5f, 2.5f)]
-    [SerializeField] float nodeRadius = 1;
+    public float nodeRadius = 1;
     [Tooltip("Does this track link one closed loop to another?")]
     [SerializeField] bool isLinkTrack = false;
     [Tooltip("Only assign if isLinkTrack == true")]
@@ -51,14 +51,9 @@ public class TrafficStripScript : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if(transform.childCount > 0)
+        Gizmos.color = nodeColor;
+        if (transform.childCount > 0)
         {
-            Gizmos.color = nodeColour;
-            foreach (Transform t in transform)
-            {
-                Gizmos.DrawSphere(t.position, nodeRadius);
-            }
-
             for (int i = 0; i < transform.childCount - 1; i++)
             {
                 Gizmos.DrawLine(transform.GetChild(i).position, transform.GetChild(i + 1).position);
