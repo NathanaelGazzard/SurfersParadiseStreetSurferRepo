@@ -1,36 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-// Should be attached to the player and the player script will call this function
-// generate the missions add it to the players list
+// NOTE
+// handles all mission related stuff (Will change to Mission instead of Missiongeneration soon
 
 public class MissionGeneration : MonoBehaviour
 {
     Mission currentMission;
-    GameObject[] missionPickUpPoints;
-    GameObject[] missionDropOffPoints;
+    PlayerInteraction playerInteraction;
 
-    GameObject[] rndMissionPickUpPoints;
-    Mission[] storyMissions;
+    [SerializeField] GameObject[] missionPoints;
+    List<int> pointsTaken = new List<int>();
 
-    public MissionGeneration(string m)
+    [SerializeField] GameObject[] rndMissionPickUpPoints;
+    List<Mission> storyMissions = new List<Mission>();
+    List<bool> missionStatus = new List<bool>();
+
+    protected int numerOfMissions = 2;
+    int completedCount = 0;
+    int curSelectedMission = 0;
+    bool isOnMission = false;
+
+    // UI
+    [SerializeField] GameObject missionUI;
+    [SerializeField] TextMeshProUGUI pickupUI;
+    [SerializeField] TextMeshProUGUI dropOffUI;
+    [SerializeField] TextMeshProUGUI rewardUI;
+
+    [SerializeField] TextMeshProUGUI pickupSelectUI;
+    [SerializeField] TextMeshProUGUI dropOffSelectUI;
+    [SerializeField] TextMeshProUGUI rewardSelectUI;
+
+    public void Start()
     {
-        Debug.Log("Initialised Mission generaiton: " + m);
+        missionUI.SetActive(false);
+        playerInteraction = gameObject.GetComponent<PlayerInteraction>();
     }
 
-    public  Mission GenerateStoryMission()
+    public void GenMissions()
     {
-        // On generation, it will communicate with these pick/drop points and make them a mission pick/drop
-        GameObject pickUp = generatePointLocation(missionPickUpPoints);
-        GameObject dropOff = generatePointLocation(missionDropOffPoints);
+        for (int i = 0; i < 2; i++)
+        {
+            GenerateStoryMissionLocations();
+        }
+        Mission cur = this.storyMissions[curSelectedMission];
+        ChangeMissionSelectCard(cur);
+    }
+
+    public void GenerateStoryMissionLocations()
+    {
+        // Distance function implemented later on
+        // Can be made into one function...
+        int pickUp = GeneratePickUpLocation(missionPoints);
+        int dropOff = GeneratePickUpLocation(missionPoints, "SetAsDropOff");
 
         // some randomised function to generate these values
-        int r = 1000;
-        string item = "Cory Cigaretes";
-        string delInst = "Deliver to Cory at x location";
-        Mission generatedMission = new Mission(r, item, delInst);
-        return generatedMission;
+        int reward = 1000;
+        // not as random, as we can use the MissionInteraction values to keep location and people the same 
+        // for future speed runners, know where to go when we mention person x at location y
+        string[] rndItems = { "Ciggies", "Mushrooms", "Drugz" };
+        MissionInteractable point = this.missionPoints[pickUp].GetComponentInChildren<MissionInteractable>();
+        MissionInteractable point_2 = this.missionPoints[dropOff].GetComponentInChildren<MissionInteractable>();
+        Mission generatedMission = new Mission(reward, rndItems[Random.Range(0, rndItems.Length)], point.Location(), point_2.Location(), pickUp, dropOff);
+        storyMissions.Add(generatedMission);
+        missionStatus.Add(false);
     }
 
     public void GenerateRandomMissions()
@@ -43,8 +79,92 @@ public class MissionGeneration : MonoBehaviour
         // a rndMissionPickUpPoint can be suspicious shrooms or rnd weed
     }
 
-    public GameObject generatePointLocation(GameObject[] points)
+    int GeneratePickUpLocation(GameObject[] points, string call = "SetAsPickUp")
     {
-        return points[Random.Range(0, points.Length)];
+        int x;
+        while (true)
+        {
+            x = Random.Range(0, points.Length);
+            if (pointsTaken.IndexOf(x) < 0)
+            {
+                break;
+            }
+        }
+        pointsTaken.Add(x);
+
+        MissionInteractable point = points[x].GetComponentInChildren<MissionInteractable>();
+        // Will need a mission number, which will be index based
+        // but when set will be able to define which points are linked
+        // adds to both pick/drop, before it gets added to Missionpoints in GenerateStoryMissionLocations()
+        point.SendMessage(call, (storyMissions.Count).ToString());
+        return x;
+    }
+
+    void ChangeMissionCard(string p, string d, string r)
+    {
+        pickupUI.text = p; ;
+        dropOffUI.text = d;
+        rewardUI.text = r;
+    }
+
+    void ChangeMissionSelectCard(Mission cur)
+    {
+        pickupSelectUI.text = cur.GetPickUp();
+        dropOffSelectUI.text = cur.GetDropOff();
+        rewardSelectUI.text = cur.GetReward().ToString();
+    }
+
+    // Mission UI related functions
+    public void OpenMissionMenu()
+    {
+        missionUI.SetActive(true);
+    }
+    public void CloseMissionMenu()
+    {
+        missionUI.SetActive(false);
+    }
+
+    public void SetMission()
+    {
+        if (isOnMission) return;
+        if (missionStatus[curSelectedMission]) { Debug.Log("Already completed"); return; }
+        Debug.Log(curSelectedMission);
+        gameObject.GetComponent<PlayerInteraction>().SendMessage("SetCurMissionID", curSelectedMission);
+        currentMission = this.storyMissions[curSelectedMission];
+        ChangeMissionCard(currentMission.GetPickUp(), currentMission.GetDropOff(), currentMission.GetReward().ToString());
+        isOnMission = true;
+    }
+
+    public void NextMission()
+    {
+        if (isOnMission) return;
+        curSelectedMission++;
+        if (curSelectedMission == this.storyMissions.Count) curSelectedMission = 0;
+        Mission cur = this.storyMissions[curSelectedMission];
+        ChangeMissionSelectCard(cur);
+    }
+
+    public void PrevMission()
+    {
+        if (isOnMission) return;
+        curSelectedMission--;
+        if (curSelectedMission == -1) curSelectedMission = this.storyMissions.Count - 1;
+        Mission cur = this.storyMissions[curSelectedMission];
+        ChangeMissionSelectCard(cur);
+    }
+
+    public void CompleteMission()
+    {
+        isOnMission = false;
+        completedCount++;
+        ChangeMissionCard("", "", "");
+        missionStatus[curSelectedMission] = true;
+        curSelectedMission = 0;
+        Mission cur = this.storyMissions[curSelectedMission];
+        ChangeMissionSelectCard(cur);
+        if (completedCount == numerOfMissions)
+        {
+            Debug.Log("Game completed");
+        }
     }
 }

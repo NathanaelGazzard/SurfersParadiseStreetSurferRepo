@@ -1,79 +1,127 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public Camera mainCam;
+    [SerializeField] public Camera mainCam;
     public float interationDistance = 2f;
 
+    // interaction UI
     public GameObject interactionUI;
     public TextMeshProUGUI interactionText;
-    public bool missionStatus = false;
+
+    MissionGeneration msRef;
+
+    bool missionUIOpen = false;
+    bool isOnMission = false;
+    int curMissionID = -1;
+    bool isMissionPickedUp = false;
+
+    private void Start()
+    {
+        msRef = gameObject.GetComponent<MissionGeneration>();
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (missionUIOpen)
+            {
+                Cursor.visible = false;
+                missionUIOpen = false;
+                msRef.CloseMissionMenu();
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else
+            {
+                Cursor.visible = true;
+                missionUIOpen = true;
+                msRef.OpenMissionMenu();
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
         InteractionRay();
+    }
+
+    void InRange(string id)
+    {
+        MissionInteractable obj = GameObject.FindGameObjectWithTag(id).GetComponentInChildren<MissionInteractable>();
+        interactionText.text = obj.GetDescription();
+        interactionUI.SetActive(true);
     }
 
     void InteractionRay()
     {
-        Ray ray = mainCam.ViewportPointToRay(Vector3.one / 2f);
+        Ray ray = mainCam.ViewportPointToRay(Vector3.one / 10f);
         RaycastHit hit;
-
         bool hitSomething = false;
         if (Physics.Raycast(ray, out hit, interationDistance))
         {
-            if (hit.collider.GetComponent<MissionDropOff>() != null) // mission pick up interactable
+            if (hit.collider.GetComponent<MissionInteractable>())
             {
                 hitSomething = true;
-                MissionDropOff interactable = hit.collider.GetComponent<MissionDropOff>();
-                // Might be a place to eventually interact, but not now
-                if (!interactable.IsInteractable()) return;
-
-                if (interactable.GetIsDropOffPoint()) // if a valid drop off point for current misison
+                MissionInteractable point = hit.collider.GetComponentInChildren<MissionInteractable>();
+                if (point.IsPickUp())
                 {
-                    interactionText.text = interactable.GetDescription();
-                    // Handle the actions
-                    if (Input.GetKeyDown(KeyCode.E))
+                    if (isOnMission)
                     {
-                        // get mission
-                        missionStatus = false;
-                        interactable.Interact();
-                        interactable.SetDropOff(false);
-                        interactionText.text = "";
+                        if (point.GetID() == this.curMissionID.ToString()) // point at which we need to pick this mission up
+                        {
+                            interactionText.text = "Pick mission up";
+                            if (Input.GetKeyDown(KeyCode.E))
+                            {
+                                isMissionPickedUp = true;
+                                point.Interact();
+                            }
+                        }
+                        else
+                        {
+                            hitSomething = false; // wont show any interaction text so player doesn't know that this is a future spot
+                        }
+                    }
+                }
+                else if (!point.IsPickUp() && isMissionPickedUp) // drop off point or a mission that is not yet active
+                {
+                    if (point.GetID() == this.curMissionID.ToString()) // is a dropoff
+                    {
+                        interactionText.text = "Drop mission off";
+                        if (Input.GetKeyDown(KeyCode.E))
+                        {
+                            isMissionPickedUp = false;
+                            point.Interact();
+                            msRef.CompleteMission();
+                        }
+                    }
+                    else
+                    {
+                        hitSomething = false; // wont show any interaction text so player doesn't know that this is a future spot
                     }
                 }
                 else
                 {
-                    interactionText.text = "Not a valid drop off";
+                    hitSomething = false; // wont show any interaction text so player doesn't know that this is a future spot
                 }
-            } else if  (hit.collider.GetComponent<MissionDropOff>() != null) {
-                hitSomething = true;
-                MissionRecieval interactable = hit.collider.GetComponent<MissionRecieval>();
-                if (missionStatus)
-                {
-                    interactionText.text = "You are already on a mission";
-                }
-                else
-                {
-                    interactionText.text = interactable.GetDescription();
-                    // Handle the actions
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        // get mission
-                        missionStatus = true;
-                        interactable.Interact();
-                    }
-                }
-            } else // for now is a mission recieval interactable
-            {
-                Debug.Log("Interacting with eashy");
             }
         }
         interactionUI.SetActive(hitSomething);
+    }
+
+    void OnDrawGizmos()
+    {
+        // Draw a yellow sphere at the transform's position
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(mainCam.transform.position, interationDistance);
+    }
+
+    void SetCurMissionID(int id)
+    {
+        this.isOnMission = true;
+        this.curMissionID = id;
     }
 }

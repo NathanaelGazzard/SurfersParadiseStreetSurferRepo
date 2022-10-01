@@ -13,6 +13,11 @@ public class MissionRecieval : MonoBehaviour, IInteractable
 
     public GameObject[] missionDropOffPoints;
 
+    public void Init()
+    {
+        Debug.Log("Constructor for m r");
+    }
+
     public string GetDescription()
     {
         return "Ayo this a mission homie, take it! Dont get caught";

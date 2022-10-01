@@ -16,7 +16,7 @@ public class WishlistItem
     {
         itemName = _name;
         itemCost = _cost;
-        if(PlayerPrefs.GetInt(_name, 0) == 0)
+        if (PlayerPrefs.GetInt(_name, 0) == 0)
         {
 
             isPurchased = false;
@@ -30,11 +30,6 @@ public class WishlistItem
 
 public class GameManagerScript : MonoBehaviour
 {
-    // Mission
-    [SerializeField] GameObject[] missionPickUpPoints;
-    [SerializeField] GameObject[] missionDropOffPoints;
-
-    [SerializeField] GameObject[] rndMissionPickUpPoints;
 
     //UI
     [SerializeField] GameObject menuBackDropUI;
@@ -51,6 +46,10 @@ public class GameManagerScript : MonoBehaviour
 
     [SerializeField] GameObject playerRef;
     [SerializeField] GameObject flyover; // the seagul that flys over the scene
+
+    // Mission UI
+    [SerializeField] GameObject missionUI;
+    [SerializeField] GameObject interactionUI;
 
 
     bool isPlaying = false;
@@ -70,6 +69,9 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        missionUI.SetActive(false);
+        interactionUI.SetActive(false);
+
         InitWishlist();
         playerRef.SetActive(false);
         flyover.SetActive(true);
@@ -81,11 +83,9 @@ public class GameManagerScript : MonoBehaviour
         {
             wishlistButtonLabels[i].text = wishlistItems[i].itemName + " - $" + wishlistItems[i].itemCost + ".00";
         }
-
-        InitialiseMissions();
     }
 
-    
+
     void InitWishlist()
     {
         // SUPER IMPORTANT: THE SAVE FUNCTIONALITY WILL NOT WORK UNLESS ALL THESE ITEMS HAVE UNIQUE NAMES
@@ -122,15 +122,8 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-
-
-
-
-    
-
-
     //All the following functions are to be called by buttons in the menus.
-    
+
     public void Continue()
     {
         mainMenuUI.SetActive(false);
@@ -167,10 +160,12 @@ public class GameManagerScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         isPlaying = true;
-
         currentObjective = wishlistItems[itemRefNumber];
         goalCost = currentObjective.itemCost;
         ReceiveMoney(0);
+        MissionGeneration ms = GameObject.FindGameObjectWithTag("Player").GetComponent<MissionGeneration>();
+
+        ms.GenMissions();
     }
 
 
@@ -256,19 +251,11 @@ public class GameManagerScript : MonoBehaviour
 
 
 
-
-    public void InitialiseMissions()
-    {
-        MissionGeneration ms = new MissionGeneration("SUS");
-    }
-
-
-
     public void ReceiveMoney(int amountReceived)
     {
         currentCash += amountReceived;
-        goalProgressText.text = "$" + currentCash.ToString() + " / $" + goalCost.ToString(); 
-        if(currentCash >= goalCost)
+        goalProgressText.text = "$" + currentCash.ToString() + " / $" + goalCost.ToString();
+        if (currentCash >= goalCost)
         {
             PlayerWon();
         }
