@@ -13,6 +13,8 @@ Credits:
 	https://assetstore.unity.com/packages/tools/particles-effects/true-clouds-fog-mobile-pc-107379 - clouds
 	https://assetstore.unity.com/packages/2d/textures-materials/sky/free-stylized-skybox-212257 - skybox
 	https://www.youtube.com/watch?v=EwHiMQ3jdHw&t=108s - waypoints (traffic nodes)
+	https://assetstore.unity.com/packages/3d/vehicles/land/polygrunt-construction-vehicles-168884 - Construction Vehcles
+
 
 
 	Characters:

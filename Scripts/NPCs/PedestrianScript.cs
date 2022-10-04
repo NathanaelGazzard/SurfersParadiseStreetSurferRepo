@@ -28,9 +28,8 @@ public class PedestrianScript : MonoBehaviour
 
     float defaultWalkSpeed; // the navmeshagent's walkspeed
 
-    // these variables are used for delays via the DelayCheck function
+    // this var is used for delays via the DelayCheck function
     float delayTimer = 0;
-    float delayLength;
 
     int state = 0; // set up enum for the states (Walking, resting, knocked, chasing, frozen)
 
@@ -38,6 +37,13 @@ public class PedestrianScript : MonoBehaviour
 
     bool hasPunched = false; // this will be used to prevent the pedestrian from being "hit" by the player the moment their state transitions after punching the player
 
+    AudioSource pedoAudioSource;
+
+    // note: audio for the player getting too close will be played from a seperate game object (below) to save on distance calculations checking for the difference between a close call and an actual hit
+    [SerializeField] GameObject proximityBarkObject;
+    [SerializeField] AudioClip[] hitAudio;
+    [SerializeField] AudioClip[] chaseAudio;
+    [SerializeField] AudioClip[] giveUpAudio;
 
 
     void Start()
@@ -54,6 +60,8 @@ public class PedestrianScript : MonoBehaviour
         modelAnimator = pedestrianModels[modelToUse].GetComponent<Animator>();
         modelAnimator.SetFloat("WalkType", walkType);
         modelAnimator.SetFloat("RunType", runType);
+
+        pedoAudioSource = GetComponent<AudioSource>();
     }
 
 
@@ -109,7 +117,7 @@ public class PedestrianScript : MonoBehaviour
     void PhoneBreak()
     {
         modelAnimator.SetTrigger("CheckPhone");
-        if (DelayCheck())
+        if (DelayCheck(4))
         {
             modelAnimator.ResetTrigger("CheckPhone");
             NewDestination();
@@ -120,11 +128,14 @@ public class PedestrianScript : MonoBehaviour
 
     void Knocked()
     {
-        if (DelayCheck())
+        if (DelayCheck(1.4f))
         {
-            delayLength = 0.5f; // this will determine how frequently the pedestrian will recalculate their path. The lower the value, the more accurately it will track the player but at the cost of performance
-            delayTimer = delayLength; // this is initialised to the time limit so that it will set the players position immediately then check at intervals
             myNavAgent.speed = 5;
+            myNavAgent.SetDestination(playerRef.position);
+
+            AudioClip clipToPlay = chaseAudio[Random.Range(0, chaseAudio.Length)];
+            pedoAudioSource.PlayOneShot(clipToPlay);
+
             state = 3;
         }
     }
@@ -133,9 +144,8 @@ public class PedestrianScript : MonoBehaviour
     void ChasePlayer()
     {
         //checks players position at intervals (length of intervals defined in Knocked() function
-        if (DelayCheck())
+        if (DelayCheck(0.2f))
         {
-            delayTimer = 0;
             myNavAgent.SetDestination(playerRef.position);
         }
 
@@ -147,13 +157,15 @@ public class PedestrianScript : MonoBehaviour
             modelAnimator.SetTrigger("StopChasing");
             myNavAgent.speed = defaultWalkSpeed;
             myNavAgent.SetDestination(destination);
+
+            AudioClip clipToPlay = giveUpAudio[Random.Range(0, giveUpAudio.Length)];
+            pedoAudioSource.PlayOneShot(clipToPlay);
+
             state = 0;
         }
         else if(distToPlayer < 1.5f)
         {
             modelAnimator.SetTrigger("Punch");
-            delayTimer = 0;
-            delayLength = 0.3f;
             myNavAgent.speed = defaultWalkSpeed;
             myNavAgent.SetDestination(destination);
             hasPunched = true;
@@ -176,8 +188,6 @@ public class PedestrianScript : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, destination) < 2)
         {
-            delayTimer = 0;
-            delayLength = 4;
             state = 1;
         }
     }
@@ -187,25 +197,32 @@ public class PedestrianScript : MonoBehaviour
     // is the player bumps into the pedestrian, they will get real angry
     private void OnTriggerEnter(Collider other)
     {
+        //this is when the player initially hits the pedestrian
         if (other.CompareTag("Player") && state < 2 && !hasPunched)
         {
+            proximityBarkObject.SetActive(false); // pedestrian will no longer yell about the player getting too close
+
+            AudioClip clipToPlay = hitAudio[Random.Range(0, hitAudio.Length)];
+            pedoAudioSource.PlayOneShot(clipToPlay);
+
             myNavAgent.speed = 0; // cannot move while staggered
+
             modelAnimator.SetTrigger("Knocked");
+
             holdsGrudge = true;
-            delayLength = 1.4f; //length of the knocked animation
-            delayTimer = 0;
+
             state = 2;
         }
     }
 
 
     // this function can be called by an if statement in update and will only activate after a delay the length of delayLength
-    // (provided delayTimer is reset to zero before this function is repeatedly called)
-    bool DelayCheck()
+    bool DelayCheck(float delayLength)
     {
         delayTimer += Time.deltaTime;
         if (delayTimer > delayLength)
         {
+            delayTimer = 0;
             return true;
         }
         else

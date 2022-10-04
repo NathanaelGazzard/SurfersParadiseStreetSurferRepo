@@ -38,6 +38,13 @@ public class EshayScript : MonoBehaviour
 
     bool holdsGrudge = false; // if the eshay has been agroed before, they will immediately come after the player again in future 
 
+    AudioSource eshayAudioSource;
+
+    [SerializeField] AudioClip[] warningAudio;
+    [SerializeField] AudioClip[] agroAudio;
+    [SerializeField] AudioClip[] chaseAudio;
+    [SerializeField] AudioClip[] giveUpAudio;
+
 
 
     void Start()
@@ -52,6 +59,8 @@ public class EshayScript : MonoBehaviour
         eshayModels[modelToUse].SetActive(true);
 
         modelAnimator = eshayModels[modelToUse].GetComponent<Animator>();
+
+        eshayAudioSource = GetComponent<AudioSource>();
     }
 
 
@@ -145,12 +154,20 @@ public class EshayScript : MonoBehaviour
         {
             holdsGrudge = true;
             modelAnimator.SetTrigger("BackToWalking");
+
+            AudioClip clipToPlay = agroAudio[Random.Range(0, agroAudio.Length)];
+            eshayAudioSource.PlayOneShot(clipToPlay);
+
             state = 3;
         }
         else if (!playerClose)
         {
             modelAnimator.SetTrigger("BackToWalking");
             NewDestination();
+
+            AudioClip clipToPlay = giveUpAudio[Random.Range(0, giveUpAudio.Length)];
+            eshayAudioSource.PlayOneShot(clipToPlay);
+
             state = 0;
         }
     }
@@ -169,12 +186,20 @@ public class EshayScript : MonoBehaviour
         if (distToPlayer > chaseDist)
         {
             myNavAgent.SetDestination(destination);
+
+            AudioClip clipToPlay = chaseAudio[Random.Range(0, chaseAudio.Length)];
+            eshayAudioSource.PlayOneShot(clipToPlay);
+
             state = 0;
         }
         else if (distToPlayer < chaseRange)
         {
             modelAnimator.SetTrigger("StartRunning");
             myNavAgent.speed = defaultWalkSpeed * runSpeedMultiplyer;
+
+            AudioClip clipToPlay = giveUpAudio[Random.Range(0, giveUpAudio.Length)];
+            eshayAudioSource.PlayOneShot(clipToPlay);
+
             state = 4;
         }
     }
@@ -233,11 +258,19 @@ public class EshayScript : MonoBehaviour
             if (holdsGrudge)
             {
                 modelAnimator.SetTrigger("StartRunning");
+
+                AudioClip clipToPlay = chaseAudio[Random.Range(0, chaseAudio.Length)];
+                eshayAudioSource.PlayOneShot(clipToPlay);
+
                 state = 4;
             }
             else
             {
                 modelAnimator.SetTrigger("Agro");
+
+                AudioClip clipToPlay = warningAudio[Random.Range(0, warningAudio.Length)];
+                eshayAudioSource.PlayOneShot(clipToPlay);
+
                 state = 2;
             }
         }
