@@ -30,11 +30,11 @@ public class CharacterControllerScript : MonoBehaviour
 
     [SerializeField] float normalMoveSpeed; //players skating speed
     float currentSpeedBoost; //when the player lets go of a moving vehicle, this will be set to the speed of the vehicle and will then decay over time
-    [SerializeField] float boostDecayRate = 0.4f; //rate that the boost speed will reduce
+    [SerializeField] float boostDecayRate = 0.35f; //rate that the boost speed will reduce
 
     bool isJumping = false;
     [SerializeField] float jumpSpeed = 5f;
-    float jumpDecay = 1f;
+    float jumpDecay = 0.2f;
     float jumpTimer = 1f;
     float gravitySpeed = -9.81f;
     float gravityAccelleration = 0f;
@@ -196,7 +196,7 @@ public class CharacterControllerScript : MonoBehaviour
             else if (!isJumping)
             {
                 // applies a nominal amount of gravity when the player is grounded to ensure they don't drift above the ground accidentally preventing jumps
-                moveMag.y = -0.05f;
+                moveMag.y = -0.2f;
             }
         }
 

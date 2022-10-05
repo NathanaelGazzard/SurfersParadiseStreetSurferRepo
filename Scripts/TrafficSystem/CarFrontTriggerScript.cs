@@ -19,7 +19,6 @@ public class CarFrontTriggerScript : MonoBehaviour
     {
         if (other.CompareTag("Car") && other.transform != transform.parent)
         {
-            print(other.gameObject.name);
             carsInFront++;
             carScript.isTailgaiting = true;
         }

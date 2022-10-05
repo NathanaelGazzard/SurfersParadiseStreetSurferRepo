@@ -33,8 +33,6 @@ public class PedestrianScript : MonoBehaviour
 
     int state = 0; // set up enum for the states (Walking, resting, knocked, chasing, frozen)
 
-    bool holdsGrudge = false; // this bool is here to use if we want AI memory. Eg, if the player has previously hit them, the AI might yell if they get too close in future and may even start chasing again
-
     bool hasPunched = false; // this will be used to prevent the pedestrian from being "hit" by the player the moment their state transitions after punching the player
 
     AudioSource pedoAudioSource;
@@ -103,7 +101,7 @@ public class PedestrianScript : MonoBehaviour
             randomPoint = transform.position + Random.insideUnitSphere * maxWalkDist;
 
             // find the navmesh point closest to the new point
-            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, 41))
             {
                 destination = hit.position;
             }
@@ -170,7 +168,7 @@ public class PedestrianScript : MonoBehaviour
             myNavAgent.SetDestination(destination);
             hasPunched = true;
             state = 0;
-            Invoke("DelayedAttackOutput", 0.4f);
+            Invoke("DelayedAttackOutput", 0.2f);
         }
     }
 
@@ -208,8 +206,6 @@ public class PedestrianScript : MonoBehaviour
             myNavAgent.speed = 0; // cannot move while staggered
 
             modelAnimator.SetTrigger("Knocked");
-
-            holdsGrudge = true;
 
             state = 2;
         }

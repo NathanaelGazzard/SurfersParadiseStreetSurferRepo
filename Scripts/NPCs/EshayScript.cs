@@ -314,7 +314,7 @@ public class EshayScript : MonoBehaviour
             randomPoint = transform.position + Random.insideUnitSphere * maxWalkDist;
 
             // find the navmesh point closest to the new point
-            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, 41))
             {
                 destination = hit.position;
             }
