@@ -30,12 +30,6 @@ public class CarScript : MonoBehaviour
 
     bool playerInRange = false;
 
-    [SerializeField] bool isPolice;
-    [SerializeField] GameObject policeCarModel;
-
-    [Header("NPC Police Actor")]
-    [SerializeField] GameObject policeAIPrefab;
-
     Transform playerRef;
 
 
@@ -43,16 +37,8 @@ public class CarScript : MonoBehaviour
 
     void Start()
     {
-        if (isPolice)
-        {
-            GetComponent<SphereCollider>().enabled = true;
-            carModel = GameObject.Instantiate(policeCarModel, transform).transform;
-        }
-        else
-        {
-            int c = Random.Range(0, carModels.Length);
-            carModel = GameObject.Instantiate(carModels[c], transform).transform;
-        }
+        int c = Random.Range(0, carModels.Length);
+        carModel = GameObject.Instantiate(carModels[c], transform).transform;
         carModel.localPosition = Vector3.zero;
 
         rotTarg.LookAt(lookTarg);
@@ -67,13 +53,7 @@ public class CarScript : MonoBehaviour
 
     void Update()
     {
-        if (playerInRange)
-        {
-            GameObject newPoliceCar = Instantiate(policeAIPrefab);
-            newPoliceCar.GetComponent<PoliceCarScript>().playerRef = playerRef;
-            Destroy(gameObject);
-        }
-        else if (isStuck)
+        if (isStuck)
         {
             transform.position += Vector3.up * 15 * Time.deltaTime;
             timeStopped += Time.deltaTime;
@@ -127,23 +107,6 @@ public class CarScript : MonoBehaviour
         if (!destinationNode.GetComponent<TrafficNodeScript>().mustGiveWay)
         {
             givingWay = true;
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (isPolice && other.CompareTag("Player"))
-        {
-            playerInRange = true;
-            playerRef = other.transform;
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (isPolice && other.CompareTag("Player"))
-        {
-            playerInRange = false;
         }
     }
 }

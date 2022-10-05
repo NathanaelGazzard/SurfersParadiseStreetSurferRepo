@@ -120,17 +120,22 @@ MonoBehaviour:
   maxWalkDist: 20
   runSpeedMultiplyer: 3
   warningAudio:
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+  - {fileID: 8300000, guid: da3ac7200aa834240902d84892b26ae5, type: 3}
+  - {fileID: 8300000, guid: 71f7b18e1b667d149956fd8222bd90e7, type: 3}
+  - {fileID: 8300000, guid: 0700316e280fc3345a7f79202abb8165, type: 3}
   agroAudio:
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+  - {fileID: 8300000, guid: ac05a49e96b94aa4c82bcbe2d5d45422, type: 3}
+  - {fileID: 8300000, guid: 5f1560717e785bf448e73826cb68f2be, type: 3}
+  - {fileID: 8300000, guid: fe9caf114b01bb8439d17ab1376020ce, type: 3}
+  - {fileID: 8300000, guid: 08d6d15916643364cb6ea79acfdd5a3a, type: 3}
   chaseAudio:
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+  - {fileID: 8300000, guid: e588eeb51f6d7194b896745f48007ed2, type: 3}
+  - {fileID: 8300000, guid: 9c103fb748e274342965c705749f028b, type: 3}
+  - {fileID: 8300000, guid: b01e5dff53e46cf46856b56fe086520e, type: 3}
+  - {fileID: 8300000, guid: cbc56694eb955e648ace4b165274d359, type: 3}
   giveUpAudio:
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+  - {fileID: 8300000, guid: 4f14ddca10bb76b4e81e896bb41819a5, type: 3}
+  - {fileID: 8300000, guid: b39059dd4cf214f4e8f0002ca127aa9a, type: 3}
 --- !u!136 &1411456348988306046
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -177,7 +182,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
@@ -214,7 +219,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.7
       inSlope: 0
       outSlope: 0
       tangentMode: 0

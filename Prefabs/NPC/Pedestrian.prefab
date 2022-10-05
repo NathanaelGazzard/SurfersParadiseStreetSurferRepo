@@ -103,14 +103,20 @@ MonoBehaviour:
   playerRef: {fileID: 0}
   proximityBarkObject: {fileID: 2675018802989958293}
   hitAudio:
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+  - {fileID: 8300000, guid: 2c21c55875a727b48b5cb6c06ba05d43, type: 3}
+  - {fileID: 8300000, guid: 961014f669eeedf4da6dee2a5fa7df37, type: 3}
+  - {fileID: 8300000, guid: a6c13138d193f884783a9f90c30bf99d, type: 3}
   chaseAudio:
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+  - {fileID: 8300000, guid: b01e5dff53e46cf46856b56fe086520e, type: 3}
+  - {fileID: 8300000, guid: b0136ec5f7a2a3848a8c28b835e96666, type: 3}
+  - {fileID: 8300000, guid: edbba9861ee7dca48a60cd41f87520bd, type: 3}
+  - {fileID: 8300000, guid: 784985ff15ade6b458c3c8f97ec3a0ef, type: 3}
+  - {fileID: 8300000, guid: b01e5dff53e46cf46856b56fe086520e, type: 3}
+  - {fileID: 8300000, guid: 9c103fb748e274342965c705749f028b, type: 3}
   giveUpAudio:
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
-  - {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+  - {fileID: 8300000, guid: 7be94b9a7a7dd954e8ec8b94a6959b1b, type: 3}
+  - {fileID: 8300000, guid: b7c6733a3ab188145b83d3188094d256, type: 3}
+  - {fileID: 8300000, guid: 4f14ddca10bb76b4e81e896bb41819a5, type: 3}
 --- !u!136 &2207197623436754314
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -158,7 +164,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
@@ -195,7 +201,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.7
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -291,16 +297,32 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: audioClipOptions.Array.size
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: audioClipOptions.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+      objectReference: {fileID: 8300000, guid: 3f655d458f3cd0a4299ffbba3a46f2eb, type: 3}
     - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: audioClipOptions.Array.data[1]
       value: 
-      objectReference: {fileID: 8300000, guid: 955a01f86e79a8f40b115046bf32bdd1, type: 3}
+      objectReference: {fileID: 8300000, guid: 19abd4ade5bdd4d4d9cf5640b8949db9, type: 3}
+    - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: audioClipOptions.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 384a95975f2d35c4582459249f4b6929, type: 3}
+    - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: audioClipOptions.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: d9ce60a28d713d24884d72ecec1192f0, type: 3}
+    - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: audioClipOptions.Array.data[4]
+      value: 
+      objectReference: {fileID: 8300000, guid: 8a0130734f658dc4e8f17212332603d0, type: 3}
+    - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: audioClipOptions.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6cc9fc93eca953843909293637a058aa, type: 3}
     - target: {fileID: 3592466028831460751, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: m_Name
       value: ProximityAudioBark
@@ -348,6 +370,14 @@ PrefabInstance:
     - target: {fileID: 3592466028831460786, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5186334887108009192, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: DopplerLevel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5186334887108009192, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 0.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
