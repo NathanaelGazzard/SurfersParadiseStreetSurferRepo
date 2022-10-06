@@ -165,7 +165,7 @@ public class GameManagerScript : MonoBehaviour
         ReceiveMoney(0);
         MissionGeneration ms = GameObject.FindGameObjectWithTag("Player").GetComponent<MissionGeneration>();
 
-        ms.GenMissions();
+        ms.GenMissions(goalCost, 4);
     }
 
 

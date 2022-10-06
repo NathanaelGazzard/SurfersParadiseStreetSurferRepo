@@ -19,7 +19,7 @@ public class MissionGeneration : MonoBehaviour
     List<Mission> storyMissions = new List<Mission>();
     List<bool> missionStatus = new List<bool>();
 
-    protected int numerOfMissions = 2;
+    protected int numerOfMissions;
     int completedCount = 0;
     int curSelectedMission = 0;
     bool isOnMission = false;
@@ -40,9 +40,10 @@ public class MissionGeneration : MonoBehaviour
         playerInteraction = gameObject.GetComponent<PlayerInteraction>();
     }
 
-    public void GenMissions()
+    public void GenMissions(int goal, int num)
     {
-        for (int i = 0; i < 2; i++)
+        numerOfMissions = num;
+        for (int i = 0; i < num; i++)
         {
             GenerateStoryMissionLocations();
         }

@@ -95,8 +95,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 1.94
+  m_Height: 3.16
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8261868032147302995
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 265906237313121255}
   m_Layer: 0
   m_Name: MissionPoint
-  m_TagString: Untagged
+  m_TagString: MissionPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

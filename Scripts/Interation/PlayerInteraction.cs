@@ -105,6 +105,7 @@ public class PlayerInteraction : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("Could be a random mission");
                     hitSomething = false; // wont show any interaction text so player doesn't know that this is a future spot
                 }
             }
