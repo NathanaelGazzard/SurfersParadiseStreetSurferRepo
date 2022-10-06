@@ -140,6 +140,26 @@ public class Competitor : MonoBehaviour
 
 
 
+
+    // call this function and pass it the player mission destination as a parameter. 
+    Vector3 OnRoadDestination(Vector3 targetDestination)
+    {
+        Vector3 roadDestination = Vector3.zero;
+
+        while (roadDestination == Vector3.zero)
+        {
+            NavMeshHit hit;
+
+            // find the navmesh point closest to the new point
+            if (NavMesh.SamplePosition(roadDestination, out hit, 15f, 41))
+            {
+                roadDestination = hit.position;
+            }
+        }
+
+        // this is the actual on-road destination for the competitor
+        return roadDestination;
+    }
 }
 
 // Need to fix:

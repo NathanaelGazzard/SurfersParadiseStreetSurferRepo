@@ -32,6 +32,8 @@ public class GameManagerScript : MonoBehaviour
 {
 
     //UI
+    [SerializeField] GameObject fakeLoadScreen;
+
     [SerializeField] GameObject menuBackDropUI;
 
     [SerializeField] GameObject gameplayUI;
@@ -56,7 +58,7 @@ public class GameManagerScript : MonoBehaviour
     bool isPaused = false;
 
 
-    WishlistItem[] wishlistItems = new WishlistItem[12];
+    WishlistItem[] wishlistItems = new WishlistItem[8];
     [SerializeField] TextMeshProUGUI[] wishlistButtonLabels = new TextMeshProUGUI[12];
     WishlistItem currentObjective;
 
@@ -66,9 +68,12 @@ public class GameManagerScript : MonoBehaviour
 
 
 
+
     // Start is called before the first frame update
     void Start()
     {
+        fakeLoadScreen.SetActive(true);
+
         missionUI.SetActive(false);
         interactionUI.SetActive(false);
 
@@ -83,24 +88,27 @@ public class GameManagerScript : MonoBehaviour
         {
             wishlistButtonLabels[i].text = wishlistItems[i].itemName + " - $" + wishlistItems[i].itemCost + ".00";
         }
+
+        Invoke("DisableFakeLoadScreen", 1f);
+    }
+
+    void DisableFakeLoadScreen()
+    {
+        fakeLoadScreen.SetActive(false);
     }
 
 
     void InitWishlist()
     {
         // SUPER IMPORTANT: THE SAVE FUNCTIONALITY WILL NOT WORK UNLESS ALL THESE ITEMS HAVE UNIQUE NAMES
-        wishlistItems[0] = new WishlistItem("NASSICA Yacht", 3206000);
-        wishlistItems[1] = new WishlistItem("Lamborghini Countach", 2600000);
-        wishlistItems[2] = new WishlistItem("Something Expensive", 2400000);
-        wishlistItems[3] = new WishlistItem("Something Expensive", 1000000);
-        wishlistItems[4] = new WishlistItem("Something Expensive", 750000);
-        wishlistItems[5] = new WishlistItem("Something Expensive", 500000);
-        wishlistItems[6] = new WishlistItem("Something Expensive", 200000);
-        wishlistItems[7] = new WishlistItem("Something Expensive", 100000);
-        wishlistItems[8] = new WishlistItem("Something Expensive", 50000);
-        wishlistItems[9] = new WishlistItem("Something Expensive", 20000);
-        wishlistItems[10] = new WishlistItem("Something Expensive", 10000);
-        wishlistItems[11] = new WishlistItem("Something Expensive", 5000);
+        wishlistItems[0] = new WishlistItem("Yacht", 15000);
+        wishlistItems[1] = new WishlistItem("Supercar", 12000);
+        wishlistItems[2] = new WishlistItem("Camper Van", 8000);
+        wishlistItems[3] = new WishlistItem("Jet Ski", 7000);
+        wishlistItems[4] = new WishlistItem("Artwork", 6000);
+        wishlistItems[5] = new WishlistItem("Spa", 5000);
+        wishlistItems[6] = new WishlistItem("TV", 3000);
+        wishlistItems[7] = new WishlistItem("Guitar", 2000);
     }
 
 
@@ -265,5 +273,6 @@ public class GameManagerScript : MonoBehaviour
     void PlayerWon()
     {
         //uhm, activate the win sequence
+        print("Player won!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 }
