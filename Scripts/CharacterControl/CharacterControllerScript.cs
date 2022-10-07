@@ -52,6 +52,7 @@ public class CharacterControllerScript : MonoBehaviour
     [SerializeField] GameObject gameplayUI;
 
     [SerializeField] GameObject drownedCharacterModel;
+    [SerializeField] AudioClip flatLine;
 
     void Start()
     {
@@ -276,6 +277,8 @@ public class CharacterControllerScript : MonoBehaviour
         deathUI.SetActive(true);
         gameplayUI.SetActive(false);
 
+        GetComponent<AudioSource>().PlayOneShot(flatLine);
+
         Invoke("ReloadCurrentScene", 2f);
     }
 
@@ -291,6 +294,8 @@ public class CharacterControllerScript : MonoBehaviour
         Time.timeScale = 0.3f;
         deathUI.SetActive(true);
         gameplayUI.SetActive(false);
+
+        GetComponent<AudioSource>().PlayOneShot(flatLine);
 
         Invoke("ReloadCurrentScene", 2f);
     }
