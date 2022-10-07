@@ -23,7 +23,7 @@ public class WishlistItem
         }
         else
         {
-            isPurchased = false;
+            isPurchased = true;
         }
     }
 }
@@ -58,7 +58,7 @@ public class GameManagerScript : MonoBehaviour
     bool isPaused = false;
 
 
-    WishlistItem[] wishlistItems = new WishlistItem[8];
+    public WishlistItem[] wishlistItems = new WishlistItem[8];
     [SerializeField] TextMeshProUGUI[] wishlistButtonLabels = new TextMeshProUGUI[12];
     WishlistItem currentObjective;
 
