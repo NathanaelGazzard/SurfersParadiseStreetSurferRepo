@@ -19,6 +19,11 @@ public class CompassScript : MonoBehaviour
     [SerializeField] SimpleLookAtScript lookAtRef; // an object placed as a child of the camera arm with the SimpleLookAtScript attached
 
 
+    [SerializeField] Image homeIcon;
+
+    [SerializeField] Transform playerHome;
+
+
 
 
     void Start()
@@ -36,7 +41,7 @@ public class CompassScript : MonoBehaviour
         {
             for (int i = 0; i < waypoints.Count; i++)
             {
-                // makes the look at object rotate to look at the waypoint then returns the y rotation (this is the y rotation the camera would need to be looking straight at the waypoint)
+                // makes the lookAt object rotate to look at the waypoint then returns the y rotation (this is the y rotation the camera would need to be looking straight at the waypoint)
                 float lookAtAngle = lookAtRef.GetRotation(waypoints[i]);
 
                 // adjusts the planned rotation angle based on the direction the camera is looking
@@ -52,6 +57,26 @@ public class CompassScript : MonoBehaviour
                 waypointMarkers[i].GetComponent<RectTransform>().anchoredPosition = new(compassHalfWidth * Mathf.Clamp(markerAngle, -90, 90) / 90, 0);
             }
         }
+
+        UpdateHomeMarker();
+    }
+
+    void UpdateHomeMarker()
+    {
+        // makes the lookAt object rotate to look at the players home then returns the y rotation (this is the y rotation the camera would need to be looking straight at the waypoint)
+        float lookAtAngle = lookAtRef.GetRotation(playerHome);
+
+        // adjusts the planned rotation angle based on the direction the camera is looking
+        float markerAngle = lookAtAngle - playerRef.eulerAngles.y;
+
+        // this ensures that we only ever get a value between -180 and 180 (the number wraps around once the rotation is higher than 180
+        if (markerAngle > 180)
+        {
+            markerAngle = -(360 - markerAngle);
+        }
+
+        // sets the position of the respective home marker along the compass base. anything that is further than directly left or right of the player (so, behind them at all) will stay at the relevent end of the compass without moving off it. If the waypoint ends up passing from left to right or vice-versa whilst behind the player, it's marker will warp to the other end of the compass
+        homeIcon.GetComponent<RectTransform>().anchoredPosition = new(compassHalfWidth * Mathf.Clamp(markerAngle, -90, 90) / 90, 0);
     }
 
 

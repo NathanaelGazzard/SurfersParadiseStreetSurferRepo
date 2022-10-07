@@ -48,3 +48,5 @@ MonoBehaviour:
   waypointIcon: {fileID: 5187740885351197708, guid: 9e9e34ec1fca1f04b98c012cdc56b534, type: 3}
   playerRef: {fileID: 0}
   lookAtRef: {fileID: 0}
+  homeIcon: {fileID: 0}
+  playerHome: {fileID: 0}
