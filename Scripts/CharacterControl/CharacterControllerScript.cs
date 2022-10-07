@@ -302,6 +302,6 @@ public class CharacterControllerScript : MonoBehaviour
     void ReloadCurrentScene()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(2);
     }
 }

@@ -59,12 +59,15 @@ public class GameManagerScript : MonoBehaviour
 
 
     public WishlistItem[] wishlistItems = new WishlistItem[8];
+    [SerializeField] Button[] wishlistItemButtons;
     [SerializeField] TextMeshProUGUI[] wishlistButtonLabels = new TextMeshProUGUI[12];
     WishlistItem currentObjective;
 
     [SerializeField] Text goalProgressText;
     int goalCost;
     int currentCash = 0;
+
+    [SerializeField] GameObject playerHouseItemsController;
 
 
 
@@ -127,6 +130,14 @@ public class GameManagerScript : MonoBehaviour
                 PauseGame();
             }
         }
+
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  TEMP CODE
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ReceiveMoney(Random.Range(200, 1000));
+        }
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  TEMP CODE
     }
 
 
@@ -136,6 +147,27 @@ public class GameManagerScript : MonoBehaviour
     {
         mainMenuUI.SetActive(false);
         difficultyMenuUI.SetActive(true);
+
+        // loop through items to see if they've been purchased
+        foreach (WishlistItem item in wishlistItems)
+        {
+            if(PlayerPrefs.GetInt(item.itemName, 0) == 0)
+            {
+                item.isPurchased = false;
+            }
+            else
+            {
+                item.isPurchased = true;
+            }
+        }
+
+        // loop through the buttons to set them as clickable based on whether or not they've been purchased
+        for (int i = 0; i < wishlistItemButtons.Length; i++)
+        {
+            wishlistItemButtons[i].interactable = !wishlistItems[i].isPurchased;
+        }
+
+        playerHouseItemsController.SetActive(true);
     }
 
 
@@ -273,6 +305,17 @@ public class GameManagerScript : MonoBehaviour
     void PlayerWon()
     {
         //uhm, activate the win sequence
+        Time.timeScale = 0.4f;
         print("Player won!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        PlayerPrefs.SetInt(currentObjective.itemName, 1);
+
+        Invoke("ReloadGame", 1.5f);
+    }
+
+
+    void ReloadGame()
+    {
+        Time.timeScale = 1f; 
+        SceneManager.LoadScene(1);
     }
 }
