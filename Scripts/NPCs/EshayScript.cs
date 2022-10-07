@@ -187,7 +187,8 @@ public class EshayScript : MonoBehaviour
         {
             myNavAgent.SetDestination(destination);
 
-            AudioClip clipToPlay = chaseAudio[Random.Range(0, chaseAudio.Length)];
+
+            AudioClip clipToPlay = giveUpAudio[Random.Range(0, giveUpAudio.Length)];
             eshayAudioSource.PlayOneShot(clipToPlay);
 
             state = 0;
@@ -197,7 +198,7 @@ public class EshayScript : MonoBehaviour
             modelAnimator.SetTrigger("StartRunning");
             myNavAgent.speed = defaultWalkSpeed * runSpeedMultiplyer;
 
-            AudioClip clipToPlay = giveUpAudio[Random.Range(0, giveUpAudio.Length)];
+            AudioClip clipToPlay = chaseAudio[Random.Range(0, chaseAudio.Length)];
             eshayAudioSource.PlayOneShot(clipToPlay);
 
             state = 4;
