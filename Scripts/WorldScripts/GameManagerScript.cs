@@ -49,6 +49,8 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] GameObject playerRef;
     [SerializeField] GameObject flyover; // the seagul that flys over the scene
 
+    [SerializeField] GameObject freeRoamButton; // this button allows the player to still roam around after they win
+
     // Mission UI
     [SerializeField] GameObject missionUI;
     [SerializeField] GameObject interactionUI;
@@ -58,9 +60,9 @@ public class GameManagerScript : MonoBehaviour
     bool isPaused = false;
 
 
-    public WishlistItem[] wishlistItems = new WishlistItem[8];
+    public WishlistItem[] wishlistItems = new WishlistItem[9];
     [SerializeField] Button[] wishlistItemButtons;
-    [SerializeField] TextMeshProUGUI[] wishlistButtonLabels = new TextMeshProUGUI[12];
+    [SerializeField] TextMeshProUGUI[] wishlistButtonLabels = new TextMeshProUGUI[8];
     WishlistItem currentObjective;
 
     [SerializeField] Text goalProgressText;
@@ -68,6 +70,9 @@ public class GameManagerScript : MonoBehaviour
     int currentCash = 0;
 
     [SerializeField] GameObject playerHouseItemsController;
+
+    [SerializeField] TextMeshProUGUI purchaseText;
+    [SerializeField] AudioClip winSound;
 
 
 
@@ -112,6 +117,7 @@ public class GameManagerScript : MonoBehaviour
         wishlistItems[5] = new WishlistItem("Spa", 5000);
         wishlistItems[6] = new WishlistItem("TV", 3000);
         wishlistItems[7] = new WishlistItem("Guitar", 2000);
+        wishlistItems[8] = new WishlistItem("Free Roam", 999999999);
     }
 
 
@@ -148,6 +154,7 @@ public class GameManagerScript : MonoBehaviour
         mainMenuUI.SetActive(false);
         difficultyMenuUI.SetActive(true);
 
+
         // loop through items to see if they've been purchased
         foreach (WishlistItem item in wishlistItems)
         {
@@ -159,6 +166,24 @@ public class GameManagerScript : MonoBehaviour
             {
                 item.isPurchased = true;
             }
+        }
+
+
+        bool allPurchased = true;
+
+        for (int i = 0; i < 7; i++)
+        {
+            if (!wishlistItems[i].isPurchased)
+            {
+                allPurchased = false;
+            }
+        }
+ 
+
+        if (allPurchased)
+        {
+            freeRoamButton.SetActive(true);
+            freeRoamButton.GetComponentInChildren<TextMeshProUGUI>().text = wishlistItems[8].itemName;
         }
 
         // loop through the buttons to set them as clickable based on whether or not they've been purchased
@@ -305,11 +330,16 @@ public class GameManagerScript : MonoBehaviour
     void PlayerWon()
     {
         //uhm, activate the win sequence
-        Time.timeScale = 0.4f;
+        Time.timeScale = 0.2f;
         print("Player won!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         PlayerPrefs.SetInt(currentObjective.itemName, 1);
 
-        Invoke("ReloadGame", 1.5f);
+        currentCash -= currentObjective.itemCost;
+        goalProgressText.text = "$" + currentCash.ToString() + " / $0";
+        purchaseText.text = currentObjective.itemName.ToString() + " purchased!";
+        GetComponent<AudioSource>().PlayOneShot(winSound);
+
+        Invoke("ReloadGame", 0.3f);
     }
 
 

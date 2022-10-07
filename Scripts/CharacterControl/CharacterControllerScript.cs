@@ -276,9 +276,7 @@ public class CharacterControllerScript : MonoBehaviour
         deathUI.SetActive(true);
         gameplayUI.SetActive(false);
 
-
-        // >>> THIS IS A TEMP FUNCTION >>>
-        Invoke("ReloadCurrentScene", 3.8f);
+        Invoke("ReloadCurrentScene", 2f);
     }
 
 
@@ -294,8 +292,7 @@ public class CharacterControllerScript : MonoBehaviour
         deathUI.SetActive(true);
         gameplayUI.SetActive(false);
 
-        // >>> THIS IS A TEMP FUNCTION >>>
-        Invoke("ReloadCurrentScene", 3.8f);
+        Invoke("ReloadCurrentScene", 2f);
     }
 
 
