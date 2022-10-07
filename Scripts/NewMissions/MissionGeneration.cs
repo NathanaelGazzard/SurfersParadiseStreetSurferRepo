@@ -9,6 +9,8 @@ using TMPro;
 
 public class MissionGeneration : MonoBehaviour
 {
+    [SerializeField] public GameObject compassRef;
+
     Mission currentMission;
     PlayerInteraction playerInteraction;
 
@@ -64,7 +66,7 @@ public class MissionGeneration : MonoBehaviour
         string[] rndItems = { "Ciggies", "Mushrooms", "Drugz" };
         MissionInteractable point = this.missionPoints[pickUp].GetComponentInChildren<MissionInteractable>();
         MissionInteractable point_2 = this.missionPoints[dropOff].GetComponentInChildren<MissionInteractable>();
-        Mission generatedMission = new Mission(reward, rndItems[Random.Range(0, rndItems.Length)], point.Location(), point_2.Location(), pickUp, dropOff);
+        Mission generatedMission = new Mission(reward, rndItems[Random.Range(0, rndItems.Length)], point.Location(), point_2.Location(), pickUp, dropOff, point.transform, point_2.transform);
         storyMissions.Add(generatedMission);
         missionStatus.Add(false);
     }
@@ -128,11 +130,11 @@ public class MissionGeneration : MonoBehaviour
     {
         if (isOnMission) return;
         if (missionStatus[curSelectedMission]) { Debug.Log("Already completed"); return; }
-        Debug.Log(curSelectedMission);
         gameObject.GetComponent<PlayerInteraction>().SendMessage("SetCurMissionID", curSelectedMission);
         currentMission = this.storyMissions[curSelectedMission];
         ChangeMissionCard(currentMission.GetPickUp(), currentMission.GetDropOff(), currentMission.GetReward().ToString());
         isOnMission = true;
+        compassRef.GetComponent<CompassScript>().AddWaypoint(currentMission.GetPickT());
     }
 
     public void NextMission()
@@ -166,5 +168,10 @@ public class MissionGeneration : MonoBehaviour
         {
             Debug.Log("Game completed");
         }
+    }
+
+    public Mission GetCurMission()
+    {
+        return this.currentMission;
     }
 }

@@ -19,12 +19,12 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
     Vector3 destination;
 
-    public Transform playerRef; // reference to player
+    [SerializeField] public GameObject playerRef; // reference to player
 
     // this var is used for delays via the DelayCheck function
     float delayTimer = 0;
 
-    int state = 0; // set up enum for the states (Walking, resting, knocked, chasing, frozen)
+    int state = -1; // set up enum for the states (Walking, resting, knocked, chasing, frozen)
 
     [SerializeField] Transform[] loopableDestinations; // a set of destinations that this NPC will loop through rather than relying on randomness to pick their destination
     int currentDestination = 0;
@@ -78,6 +78,13 @@ public class Pedestrian_MissionVersion : MonoBehaviour
                 state = 0;
                 break;
         }
+        float distanceToPlayer = Vector3.Distance(playerRef.transform.position, transform.position);
+        if (distanceToPlayer < 5.0f)
+        {
+            PlayerInteraction pi = playerRef.GetComponent<PlayerInteraction>();
+            pi.ShowInteraction(gameObject.GetComponent<MissionInteractable>());
+            //StartInteraction(true);
+        }
     }
 
 
@@ -96,7 +103,7 @@ public class Pedestrian_MissionVersion : MonoBehaviour
         {
             destination = hit.position;
         }
-
+        destination = loopableDestinations[currentDestination].position;
         myNavAgent.SetDestination(destination);
     }
 
@@ -141,7 +148,7 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
     void Walking()
     {
-        if (Vector3.Distance(transform.position, destination) < 2)
+        if (Vector3.Distance(transform.position, destination) < 1)
         {
             state = 1;
         }
@@ -151,7 +158,7 @@ public class Pedestrian_MissionVersion : MonoBehaviour
     public void StartInteraction(bool isPickup)
     {
         state = 2;
-        modelAnimator.SetTrigger("LoopCheckPhone");
+        modelAnimator.SetTrigger("CheckPhone"); // a stand trigger
         isTalking = true;
 
         // picks a random audio clip from the greeting audio clips
