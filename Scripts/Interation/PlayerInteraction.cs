@@ -7,7 +7,7 @@ using System;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [SerializeField] public Camera mainCam;
+    [SerializeField] public GameObject compassRef;
     public float interationDistance = 2f;
 
     // interaction UI
@@ -46,7 +46,6 @@ public class PlayerInteraction : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
             }
         }
-        InteractionRay();
     }
 
     void InRange(string id)
@@ -56,67 +55,49 @@ public class PlayerInteraction : MonoBehaviour
         interactionUI.SetActive(true);
     }
 
-    void InteractionRay()
+    public void ShowInteraction(MissionInteractable point)
     {
-        Ray ray = mainCam.ViewportPointToRay(Vector3.one / 10f);
-        RaycastHit hit;
-        bool hitSomething = false;
-        if (Physics.Raycast(ray, out hit, interationDistance))
+        if (!isOnMission)
         {
-            if (hit.collider.GetComponent<MissionInteractable>())
+            interactionUI.SetActive(false);
+            return;
+        }
+        if (point.IsPickUp())
+        {
+            if (point.GetID() == this.curMissionID.ToString()) // point at which we need to pick this mission up
             {
-                hitSomething = true;
-                MissionInteractable point = hit.collider.GetComponentInChildren<MissionInteractable>();
-                if (point.IsPickUp())
+                interactionText.text = "Pick mission up";
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (isOnMission)
-                    {
-                        if (point.GetID() == this.curMissionID.ToString()) // point at which we need to pick this mission up
-                        {
-                            interactionText.text = "Pick mission up";
-                            if (Input.GetKeyDown(KeyCode.E))
-                            {
-                                isMissionPickedUp = true;
-                                point.Interact();
-                            }
-                        }
-                        else
-                        {
-                            hitSomething = false; // wont show any interaction text so player doesn't know that this is a future spot
-                        }
-                    }
-                }
-                else if (!point.IsPickUp() && isMissionPickedUp) // drop off point or a mission that is not yet active
-                {
-                    if (point.GetID() == this.curMissionID.ToString()) // is a dropoff
-                    {
-                        interactionText.text = "Drop mission off";
-                        if (Input.GetKeyDown(KeyCode.E))
-                        {
-                            isMissionPickedUp = false;
-                            point.Interact();
-                            msRef.CompleteMission();
-                        }
-                    }
-                    else
-                    {
-                        hitSomething = false; // wont show any interaction text so player doesn't know that this is a future spot
-                    }
-                }
-                else
-                {
-                    hitSomething = false; // wont show any interaction text so player doesn't know that this is a future spot
+                    isMissionPickedUp = true;
+                    point.Interact();
+                    isOnMission = true;
+                    compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetPickT(), 0);
+                    compassRef.GetComponent<CompassScript>().AddWaypoint(msRef.GetCurMission().GetDropT());
                 }
             }
+            interactionUI.SetActive(!isMissionPickedUp);
         }
-        interactionUI.SetActive(hitSomething);
+        else if (!point.IsPickUp() && isMissionPickedUp) // drop off point or a mission that is not yet active
+        {
+            if (point.GetID() == this.curMissionID.ToString()) // is a dropoff
+            {
+                interactionText.text = "Drop mission off";
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    isMissionPickedUp = false;
+                    point.Interact();
+                    msRef.CompleteMission();
+                    isOnMission = false;
+                    compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetDropT(), 0);
+                }
+            }
+            interactionUI.SetActive(isMissionPickedUp);
+        }
     }
-
-    void OnDrawGizmos()
+    public void HideInteractionBar()
     {
-        // Draw a yellow sphere at the transform's position
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(mainCam.transform.position, interationDistance);
+        interactionUI.SetActive(isMissionPickedUp);
     }
 
     void SetCurMissionID(int id)

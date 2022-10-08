@@ -92,12 +92,14 @@ public class CompassScript : MonoBehaviour
 
 
     // call this function anytime a new waypoint needs to be removed from the list
-    public void RemoveWaypoint(Transform oldWaypoint)
+    public void RemoveWaypoint(Transform oldWaypoint, int i)
     {
         int indexOf = waypoints.IndexOf(oldWaypoint);
-        waypoints.RemoveAt(indexOf);
-        GameObject markerToDestroy = waypointMarkers[indexOf].gameObject;
-        waypointMarkers.RemoveAt(indexOf);
+        //waypoints.RemoveAt(indexOf);
+        //waypointMarkers.RemoveAt(indexOf);
+        GameObject markerToDestroy = waypointMarkers[i].gameObject;
+        waypoints.RemoveAt(i);
+        waypointMarkers.RemoveAt(i);
         Destroy(markerToDestroy);
     }
 }
