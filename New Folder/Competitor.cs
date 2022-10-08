@@ -78,7 +78,7 @@ public class Competitor : MonoBehaviour
             NavMeshHit hit;
 
             // find the navmesh point closest to the new point
-            if (NavMesh.SamplePosition(targetDestination, out hit, 15f, 41))
+            if (NavMesh.SamplePosition(targetDestination, out hit, 15f, 16))
             {
                 roadDestination = hit.position;
             }
