@@ -96,6 +96,8 @@ public class CompassScript : MonoBehaviour
     {
         int indexOf = waypoints.IndexOf(oldWaypoint);
         waypoints.RemoveAt(indexOf);
+        GameObject markerToDestroy = waypointMarkers[indexOf].gameObject;
         waypointMarkers.RemoveAt(indexOf);
+        Destroy(markerToDestroy);
     }
 }
