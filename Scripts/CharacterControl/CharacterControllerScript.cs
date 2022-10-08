@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class CharacterControllerScript : MonoBehaviour
 {
     // PLAYER STILL SNAPPING TO ODD POSITIONS WHEN HITCHIKING
-    // ADD CAMERA ZOOM CHANGE BASED ON SPEED
 
 
     CharacterController characterControllerRef;
@@ -52,7 +51,13 @@ public class CharacterControllerScript : MonoBehaviour
     [SerializeField] GameObject gameplayUI;
 
     [SerializeField] GameObject drownedCharacterModel;
+
+    [SerializeField] AudioSource playerAudioSource;
     [SerializeField] AudioClip flatLine;
+    [SerializeField] AudioClip[] playerJumpAudio;
+
+    bool wasGrounded = true;
+    
 
     void Start()
     {
@@ -60,6 +65,8 @@ public class CharacterControllerScript : MonoBehaviour
         currentSpeedBoost = 0f;
         turnRot = transform.rotation.y;
         rollRot = 45f;
+        playerAudioSource = GetComponent<AudioSource>();
+        playerAudioSource.Pause();
     }
 
 
@@ -120,6 +127,13 @@ public class CharacterControllerScript : MonoBehaviour
         {
             Drowned();
         }
+
+        //when the player goes from being in air to on the ground
+        if(!wasGrounded && characterControllerRef.isGrounded)
+        {
+            playerAudioSource.PlayOneShot(playerJumpAudio[1]); // plays landing sound
+        }
+        wasGrounded = characterControllerRef.isGrounded;
     }
 
 
@@ -142,6 +156,8 @@ public class CharacterControllerScript : MonoBehaviour
         Vector3 moveMag = Vector3.Normalize(moveDir) * normalMoveSpeed + Vector3.Normalize(moveDir) * currentSpeedBoost;
 
         moveMag = transform.TransformDirection(moveMag);
+
+
 
         if (isJumping)
         {
@@ -179,12 +195,13 @@ public class CharacterControllerScript : MonoBehaviour
                     isJumping = false;
                 }
             }
-
         }
         else if (!characterControllerRef.isGrounded)
         {
             gravityAccelleration += 1f * Time.deltaTime; //multiply Time.deltaTime by a higher value to increase the initial gravity fall pace
             moveMag.y = gravitySpeed * gravityAccelleration;
+
+            playerAudioSource.Pause();
         }
         else
         {
@@ -193,11 +210,21 @@ public class CharacterControllerScript : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 isJumping = true;
+                playerAudioSource.PlayOneShot(playerJumpAudio[0]);
             }
             else if (!isJumping)
             {
                 // applies a nominal amount of gravity when the player is grounded to ensure they don't drift above the ground accidentally preventing jumps
                 moveMag.y = -0.2f;
+            }
+
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            {
+                playerAudioSource.UnPause();
+            }
+            else
+            {
+                playerAudioSource.Pause();
             }
         }
 
@@ -269,6 +296,7 @@ public class CharacterControllerScript : MonoBehaviour
 
     void Wasted()
     {
+        playerAudioSource.Pause();
         controlsEnabled = false;
         viewModelRef.SetActive(false);
         cameraRef.SetActive(false);
@@ -286,6 +314,7 @@ public class CharacterControllerScript : MonoBehaviour
     void Drowned()
     {
         //if player falls below water level:
+        playerAudioSource.Pause();
         controlsEnabled = false;
         viewModelRef.SetActive(false);
         cameraRef.SetActive(false);

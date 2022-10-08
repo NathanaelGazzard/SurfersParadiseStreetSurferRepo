@@ -13230,6 +13230,18 @@ PrefabInstance:
       propertyPath: drownedCharacterModel
       value: 
       objectReference: {fileID: 8865524610000659258}
+    - target: {fileID: 6792849211773862702, guid: cf2cd36740fb02a48a1dde258649a458, type: 3}
+      propertyPath: playerJumpAudio.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6792849211773862702, guid: cf2cd36740fb02a48a1dde258649a458, type: 3}
+      propertyPath: playerJumpAudio.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 145b35d4fc4d0054eb17cd025536fd23, type: 3}
+    - target: {fileID: 6792849211773862702, guid: cf2cd36740fb02a48a1dde258649a458, type: 3}
+      propertyPath: playerJumpAudio.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: e446349ff2268f44fa1254b7f7f049ac, type: 3}
     - target: {fileID: 6792849211773862703, guid: cf2cd36740fb02a48a1dde258649a458, type: 3}
       propertyPath: m_SlopeLimit
       value: 60
@@ -13255,11 +13267,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 086d02987c46ea2458556c3a3e055f3b, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
