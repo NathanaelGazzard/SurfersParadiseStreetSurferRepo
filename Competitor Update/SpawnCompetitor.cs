@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Competitor : MonoBehaviour
+public class SpawnCompetitor : MonoBehaviour
 {
-    
     // [SerializeField]
     // GameObject competitorModel;
-
-    [SerializeField] NavMeshAgent myNavAgent;
-
-
-    private float startDelay;
+    [SerializeField] GameObject competitorPrefab;
 
     public GameObject spawnPointsContainer;
     private Vector3[] spawnPoints;
@@ -25,30 +20,28 @@ public class Competitor : MonoBehaviour
     private int destinationPointsNum;
 
     private float totalDistance;
-    private float remainingPercentage;
 
-    public Transform playerScript;
-    
-    private Vector3 testPos = new Vector3(1732.0f, 11.0f, 2605.0f);
 
+    public Vector3 clientPosition = new Vector3(1732.0f, 11.0f, 2605.0f);
+    private Quaternion rotation = Quaternion.Euler(0, 0, 0);
+
+    // Start is called before the first frame update
     private void Start(){
+        InitiateCompetitor(clientPosition);
+    }
+
+    public void InitiateCompetitor(Vector3 goal){
         GetAllSpawnPoints();
         GetAllDestinationPoints();
         
         //OnRoadDestination(testPos);
-        FindClosestPoint(testPos);
-        
+        FindClosestPoint(goal);
+
         PickSpawnPoint();
-
-        transform.position = actualSpawnPoint;
-        totalDistance = Vector3.Distance(transform.position, actualDestination);
-
-        // competitorModel.SetActive();
-
-        //startDelay = 20f;
-        myNavAgent.SetDestination(actualDestination);
+        Instantiate(competitorPrefab, actualSpawnPoint, rotation);
+        GameObject.FindGameObjectWithTag("CompetitorNotification").GetComponent<CompetitorNotification>().ShowContainer();
     }
-    
+
     // find all the postion (Vector3 value) of possible spawn points and store them in spawnPoints list.
     private void GetAllSpawnPoints(){
         spawnPointsNum = spawnPointsContainer.transform.childCount;
@@ -69,7 +62,6 @@ public class Competitor : MonoBehaviour
         }
     }
 
-
     // call this function and pass it the player mission destination as a parameter. 
     private void OnRoadDestination(Vector3 targetDestination)
     {
@@ -78,7 +70,7 @@ public class Competitor : MonoBehaviour
             NavMeshHit hit;
 
             // find the navmesh point closest to the new point
-            if (NavMesh.SamplePosition(targetDestination, out hit, 15f, 16))
+            if (UnityEngine.AI.NavMesh.SamplePosition(targetDestination, out hit, 15f, 41))
             {
                 roadDestination = hit.position;
             }
@@ -98,7 +90,7 @@ public class Competitor : MonoBehaviour
                 actualDestination = destination;
            }
         }
-    }  
+    }
 
     // Based on the destination points, find the furthest spawn points from all the possible spawn points.
     // distance can be changed
@@ -113,46 +105,13 @@ public class Competitor : MonoBehaviour
         }
     }
     
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        /*
-        if (Time.deltaTime >= startDelay){
-            myNavAgent.SetDestination(actualDestination);
-        } else 
-        */
-        
-        if (Vector3.Distance(transform.position, actualDestination) <=  1.0f){
-            ReachedFirst();
-        }
-        remainingPercentage = Vector3.Distance(transform.position, actualDestination) / totalDistance;
-    } 
-
-    // 
-    public float GetRemainingDistanceInPercentage(){
-        return remainingPercentage;
+    public Vector3 GetSpawnPoint(){
+        return actualSpawnPoint;
     }
 
-    // if the competitor reaches the destination first
-    // simply kills the main character...for now.
-    void ReachedFirst(){
-        playerScript.GetComponent<CharacterControllerScript>().ModifyHealth(-100);
+    public Vector3 GetDestination(){
+        return actualDestination;
     }
-
-    void MissionFailed(){
-        // for now
-        Destroy(gameObject);
-        Debug.Log("Competitor destroyed.");
-    }
-
-
-
 
 
 }
-
-// Need to fix:
-// Vector3.Distance(transform, actualDestination) can be replaced.
-// Competitor should only start moving after startDelay but since Navmesh.SetDestination is defined in the start() it starts moving when the game begins.
