@@ -107,12 +107,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 961014f669eeedf4da6dee2a5fa7df37, type: 3}
   - {fileID: 8300000, guid: a6c13138d193f884783a9f90c30bf99d, type: 3}
   chaseAudio:
-  - {fileID: 8300000, guid: b01e5dff53e46cf46856b56fe086520e, type: 3}
+  - {fileID: 8300000, guid: 28070600a065929458b83bf6b61f5e04, type: 3}
   - {fileID: 8300000, guid: b0136ec5f7a2a3848a8c28b835e96666, type: 3}
   - {fileID: 8300000, guid: edbba9861ee7dca48a60cd41f87520bd, type: 3}
-  - {fileID: 8300000, guid: 784985ff15ade6b458c3c8f97ec3a0ef, type: 3}
-  - {fileID: 8300000, guid: b01e5dff53e46cf46856b56fe086520e, type: 3}
-  - {fileID: 8300000, guid: 9c103fb748e274342965c705749f028b, type: 3}
+  - {fileID: 8300000, guid: 16fd56e5c3784ec4d8162ef3b87258f6, type: 3}
+  - {fileID: 8300000, guid: d12eb5a45975ce943826430f779f8304, type: 3}
   giveUpAudio:
   - {fileID: 8300000, guid: 7be94b9a7a7dd954e8ec8b94a6959b1b, type: 3}
   - {fileID: 8300000, guid: b7c6733a3ab188145b83d3188094d256, type: 3}
@@ -297,7 +296,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: audioClipOptions.Array.size
-      value: 6
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: audioClipOptions.Array.data[0]
@@ -323,6 +322,18 @@ PrefabInstance:
       propertyPath: audioClipOptions.Array.data[5]
       value: 
       objectReference: {fileID: 8300000, guid: 6cc9fc93eca953843909293637a058aa, type: 3}
+    - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: audioClipOptions.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: 351a0384aa65de0498be29be82ba5da5, type: 3}
+    - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: audioClipOptions.Array.data[7]
+      value: 
+      objectReference: {fileID: 8300000, guid: 321edabde4a7b454e8c5776ab8445891, type: 3}
+    - target: {fileID: 3592466028831460749, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
+      propertyPath: audioClipOptions.Array.data[8]
+      value: 
+      objectReference: {fileID: 8300000, guid: 2871ceb3dc305034c8dd10fa351b50a9, type: 3}
     - target: {fileID: 3592466028831460751, guid: 65ec6d99af268ed4b945f739c738b002, type: 3}
       propertyPath: m_Name
       value: ProximityAudioBark

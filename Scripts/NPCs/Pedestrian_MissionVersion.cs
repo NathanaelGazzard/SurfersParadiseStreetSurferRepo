@@ -113,8 +113,6 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
     void IsTalking()
     {
-        //play audio clip
-
         if (!isTalking)
         {
             modelAnimator.SetTrigger("StopTalking");
@@ -169,6 +167,11 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
         // this is set so that at the end of the interaction, the npc can give the appropriate farewell to the player
         isPickupAudio = isPickup;
+    }
+
+    public void EndInteraction()
+    {
+        isTalking = false;
     }
 
 

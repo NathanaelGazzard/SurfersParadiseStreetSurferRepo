@@ -13,9 +13,6 @@ public class Competitor : MonoBehaviour
 
 
     private float startDelay;
-    private float moveSpeed = 10.0f;
-
-    //private float remainingDistance;
 
     public GameObject spawnPointsContainer;
     private Vector3[] spawnPoints;
@@ -27,31 +24,27 @@ public class Competitor : MonoBehaviour
     private Vector3 actualDestination;
     private int destinationPointsNum;
 
-    public GameObject missionPoints;
+    private float totalDistance;
+    private float remainingPercentage;
 
-    public Transform playerReference;
+    public Transform playerScript;
     
     private Vector3 testPos = new Vector3(1732.0f, 11.0f, 2605.0f);
 
     private void Start(){
         GetAllSpawnPoints();
         GetAllDestinationPoints();
-        //PickClientPosition();
+        
+        //OnRoadDestination(testPos);
         FindClosestPoint(testPos);
-        Debug.Log("supposed to spawn at: " + actualSpawnPoint.ToString());
         
         PickSpawnPoint();
-  
 
         transform.position = actualSpawnPoint;
-        Debug.Log("but spawned at: " + transform.position.ToString());
+        totalDistance = Vector3.Distance(transform.position, actualDestination);
 
         // competitorModel.SetActive();
 
-
-        //remainingDistance = Vector3.Distance(transform.position, actualDestination); 
-
-        myNavAgent.speed = moveSpeed;
         //startDelay = 20f;
         myNavAgent.SetDestination(actualDestination);
     }
@@ -76,6 +69,24 @@ public class Competitor : MonoBehaviour
         }
     }
 
+
+    // call this function and pass it the player mission destination as a parameter. 
+    private void OnRoadDestination(Vector3 targetDestination)
+    {
+        Vector3 roadDestination = Vector3.zero;
+
+            NavMeshHit hit;
+
+            // find the navmesh point closest to the new point
+            if (NavMesh.SamplePosition(targetDestination, out hit, 15f, 16))
+            {
+                roadDestination = hit.position;
+            }
+
+        // this is the actual on-road destination for the competitor
+        actualDestination =  roadDestination;
+    }
+
     // Since the competitor can only travel on roads, we cannot use the actual client position
     // and need to use substitute goal points to say that the competitor reached the goal.
     // find the destination point that is closest to the position of the client.
@@ -87,7 +98,7 @@ public class Competitor : MonoBehaviour
                 actualDestination = destination;
            }
         }
-    }
+    }  
 
     // Based on the destination points, find the furthest spawn points from all the possible spawn points.
     // distance can be changed
@@ -116,20 +127,18 @@ public class Competitor : MonoBehaviour
         if (Vector3.Distance(transform.position, actualDestination) <=  1.0f){
             ReachedFirst();
         }
+        remainingPercentage = Vector3.Distance(transform.position, actualDestination) / totalDistance;
+    } 
+
+    // 
+    public float GetRemainingDistanceInPercentage(){
+        return remainingPercentage;
     }
 
-    /*
-    // Calculate total distance and show 
-
-    public void CalculateDistance(){
-        a = Vector.Distance(transform.position, actualDestination);
-        distanceOnePercent = a/100;
-        remainingPercentage = a % distanceOnePercent;
-    }
-    */
-
+    // if the competitor reaches the destination first
+    // simply kills the main character...for now.
     void ReachedFirst(){
-        playerReference.GetComponent<CharacterControllerScript>().ModifyHealth(-100);
+        playerScript.GetComponent<CharacterControllerScript>().ModifyHealth(-100);
     }
 
     void MissionFailed(){
@@ -141,25 +150,7 @@ public class Competitor : MonoBehaviour
 
 
 
-    // call this function and pass it the player mission destination as a parameter. 
-    Vector3 OnRoadDestination(Vector3 targetDestination)
-    {
-        Vector3 roadDestination = Vector3.zero;
 
-        while (roadDestination == Vector3.zero)
-        {
-            NavMeshHit hit;
-
-            // find the navmesh point closest to the new point
-            if (NavMesh.SamplePosition(roadDestination, out hit, 15f, 41))
-            {
-                roadDestination = hit.position;
-            }
-        }
-
-        // this is the actual on-road destination for the competitor
-        return roadDestination;
-    }
 }
 
 // Need to fix:
