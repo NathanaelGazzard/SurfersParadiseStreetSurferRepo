@@ -39,6 +39,7 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
     bool isPickupAudio;
 
+    PlayerInteraction pi;
 
     void Start()
     {
@@ -57,6 +58,7 @@ public class Pedestrian_MissionVersion : MonoBehaviour
         modelAnimator.SetFloat("RunType", runType);
 
         npcAudiosource = GetComponent<AudioSource>();
+        pi = playerRef.GetComponent<PlayerInteraction>();
     }
 
 
@@ -81,18 +83,18 @@ public class Pedestrian_MissionVersion : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(playerRef.transform.position, transform.position);
         if (distanceToPlayer < 5.0f)
         {
-            PlayerInteraction pi = playerRef.GetComponent<PlayerInteraction>();
             pi.ShowInteraction(gameObject.GetComponent<MissionInteractable>());
             //StartInteraction(true);
-        }
+        } 
     }
 
 
 
     void NewDestination()
     {
-        currentDestination++;
-        if(currentDestination == loopableDestinations.Length)
+        //currentDestination++;
+        currentDestination = Random.Range(0, loopableDestinations.Length);
+        if (currentDestination == loopableDestinations.Length)
         {
             currentDestination = 0;
         }

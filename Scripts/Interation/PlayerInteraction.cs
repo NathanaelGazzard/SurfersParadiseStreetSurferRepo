@@ -57,20 +57,23 @@ public class PlayerInteraction : MonoBehaviour
 
     public void ShowInteraction(MissionInteractable point)
     {
+        if (!isOnMission)
+        {
+            interactionUI.SetActive(false);
+            return;
+        }
         if (point.IsPickUp())
         {
-            if (isOnMission)
+            if (point.GetID() == this.curMissionID.ToString()) // point at which we need to pick this mission up
             {
-                if (point.GetID() == this.curMissionID.ToString()) // point at which we need to pick this mission up
+                interactionText.text = "Pick mission up";
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    interactionText.text = "Pick mission up";
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        isMissionPickedUp = true;
-                        point.Interact();
-                        compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetPickT(), 0);
-                        compassRef.GetComponent<CompassScript>().AddWaypoint(msRef.GetCurMission().GetDropT());
-                    }
+                    isMissionPickedUp = true;
+                    point.Interact();
+                    isOnMission = true;
+                    compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetPickT(), 0);
+                    compassRef.GetComponent<CompassScript>().AddWaypoint(msRef.GetCurMission().GetDropT());
                 }
             }
             interactionUI.SetActive(!isMissionPickedUp);
@@ -85,11 +88,16 @@ public class PlayerInteraction : MonoBehaviour
                     isMissionPickedUp = false;
                     point.Interact();
                     msRef.CompleteMission();
+                    isOnMission = false;
                     compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetDropT(), 0);
                 }
             }
             interactionUI.SetActive(isMissionPickedUp);
         }
+    }
+    public void HideInteractionBar()
+    {
+        interactionUI.SetActive(isMissionPickedUp);
     }
 
     void SetCurMissionID(int id)
