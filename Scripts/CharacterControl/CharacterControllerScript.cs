@@ -336,6 +336,7 @@ public class CharacterControllerScript : MonoBehaviour
     void ReloadCurrentScene()
     {
         Time.timeScale = 1f;
+        PlayerPrefs.SetInt("PlayerCash", 0);
         SceneManager.LoadScene(2);
     }
 }

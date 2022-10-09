@@ -212,7 +212,8 @@ public class GameManagerScript : MonoBehaviour
 
     public void BeginGame(int itemRefNumber)
     {
-        // >>> set some gameplay vars from the relevent wishlist item
+        currentCash = PlayerPrefs.GetInt("PlayerCash", 0);
+
 
         menuBackDropUI.SetActive(false);
         difficultyMenuUI.SetActive(false);
@@ -328,14 +329,14 @@ public class GameManagerScript : MonoBehaviour
 
     void PlayerWon()
     {
-        //uhm, activate the win sequence
         Time.timeScale = 0.2f;
-        print("Player won!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         PlayerPrefs.SetInt(currentObjective.itemName, 1);
 
         currentCash -= currentObjective.itemCost;
+        PlayerPrefs.SetInt("PlayerCash", currentCash);
         goalProgressText.text = "$" + currentCash.ToString() + " / $0";
         purchaseText.text = currentObjective.itemName.ToString() + " purchased!";
+
         GetComponent<AudioSource>().PlayOneShot(winSound);
 
         Invoke("ReloadGame", 0.3f);
