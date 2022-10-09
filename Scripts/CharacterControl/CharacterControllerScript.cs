@@ -59,7 +59,7 @@ public class CharacterControllerScript : MonoBehaviour
     bool wasGrounded = true;
 
 
-    public bool hasContraband = true; // this will be checked by the eshays to see if they should be agro
+    public bool hasContraband = false; // this will be checked by the eshays to see if they should be agro
     
 
     void Start()
