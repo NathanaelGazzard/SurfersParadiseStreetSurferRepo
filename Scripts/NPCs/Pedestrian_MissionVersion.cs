@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class Pedestrian_MissionVersion : MonoBehaviour
 {
-    [SerializeField] GameObject[] pedestrianModels; // each pedestrian contains all possible pedestrian models
+    [SerializeField] GameObject pedestrianModelContainer;
+    GameObject[] pedestrianModels = new GameObject[16]; // each pedestrian contains all possible pedestrian models
     int modelToUse; // this is will be assigned via a random function and will determine which of the pedestrian models will be activated
 
     // the pedestrian animations have have blend trees for both walking and running. The following variables are assigned via random at
@@ -43,6 +44,12 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
     void Start()
     {
+        int i = 0;
+        foreach (Transform person in pedestrianModelContainer.transform)
+        {
+            pedestrianModels[i] = person.gameObject;
+            i++;
+        }
         myNavAgent = GetComponent<NavMeshAgent>();
 
         destination = loopableDestinations[currentDestination].position;
