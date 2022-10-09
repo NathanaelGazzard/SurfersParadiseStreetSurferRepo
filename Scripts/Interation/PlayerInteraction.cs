@@ -21,6 +21,7 @@ public class PlayerInteraction : MonoBehaviour
     int curMissionID = -1;
     bool isMissionPickedUp = false;
 
+
     private void Start()
     {
         msRef = gameObject.GetComponent<MissionGeneration>();
@@ -74,6 +75,7 @@ public class PlayerInteraction : MonoBehaviour
                     isOnMission = true;
                     compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetPickT(), 0);
                     compassRef.GetComponent<CompassScript>().AddWaypoint(msRef.GetCurMission().GetDropT());
+
                 }
             }
             interactionUI.SetActive(!isMissionPickedUp);

@@ -11,6 +11,7 @@ public class Mission
 
     public Mission(int reward, string itemName, string pick, string drop, int p, int d, Transform pickt, Transform dropt)
     {
+        this.reward = reward;
         this.p = p;
         this.d = d;
         this.item = itemName;

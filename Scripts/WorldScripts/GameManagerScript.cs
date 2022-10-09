@@ -138,12 +138,11 @@ public class GameManagerScript : MonoBehaviour
         }
 
 
-        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  TEMP CODE
-        if (Input.GetKeyDown(KeyCode.C))
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  CHEAT CODE
+        if (Input.GetKeyDown(KeyCode.P))
         {
             ReceiveMoney(Random.Range(200, 1000));
         }
-        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  TEMP CODE
     }
 
 

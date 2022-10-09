@@ -16,9 +16,12 @@ public class MissionInteractable : MonoBehaviour, IInteractable
 
     protected Transform playerTransform;
 
+    Pedestrian_MissionVersion pedScriptRef;
+
     public void Start()
     {
         missionID = "-1";
+        pedScriptRef = GetComponent<Pedestrian_MissionVersion>();
     }
 
     private void Update()
@@ -110,11 +113,11 @@ public class MissionInteractable : MonoBehaviour, IInteractable
 
     void PickUpSequence()
     {
-        
+        pedScriptRef.StartInteraction(true);
     }
 
     void DropOffSequence()
     {
-        
+        pedScriptRef.StartInteraction(false);
     }
 }

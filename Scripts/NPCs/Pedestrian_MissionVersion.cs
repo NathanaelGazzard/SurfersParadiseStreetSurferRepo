@@ -34,7 +34,6 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
     AudioSource npcAudiosource;
 
-    [SerializeField] AudioClip[] greetingAudioClips;
     [SerializeField] AudioClip[] pickupAudioClips;
     [SerializeField] AudioClip[] dropoffDeliveryClips;
 
@@ -65,6 +64,7 @@ public class Pedestrian_MissionVersion : MonoBehaviour
         modelAnimator.SetFloat("RunType", runType);
 
         npcAudiosource = GetComponent<AudioSource>();
+
         pi = playerRef.GetComponent<PlayerInteraction>();
     }
 
@@ -87,12 +87,14 @@ public class Pedestrian_MissionVersion : MonoBehaviour
                 state = 0;
                 break;
         }
+
         float distanceToPlayer = Vector3.Distance(playerRef.transform.position, transform.position);
+
         if (distanceToPlayer < 5.0f)
         {
             pi.ShowInteraction(gameObject.GetComponent<MissionInteractable>());
             //StartInteraction(true);
-        } 
+        }
     }
 
 
@@ -120,21 +122,9 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
     void IsTalking()
     {
-        if (!isTalking)
+        if (DelayCheck(1.5f))
         {
-            modelAnimator.SetTrigger("StopTalking");
-            if (isPickupAudio)
-            {
-                // picks a random audio clip from the pickup audio clips
-                int clipToPlay = Random.Range(0, pickupAudioClips.Length);
-                npcAudiosource.PlayOneShot(pickupAudioClips[clipToPlay]);
-            }
-            else
-            {
-                // picks a random audio clip from the dropoff audio clips
-                int clipToPlay = Random.Range(0, dropoffDeliveryClips.Length);
-                npcAudiosource.PlayOneShot(dropoffDeliveryClips[clipToPlay]);
-            }
+            EndInteraction();
         }
     }
 
@@ -163,22 +153,30 @@ public class Pedestrian_MissionVersion : MonoBehaviour
 
 
     public void StartInteraction(bool isPickup)
-    {
-        state = 2;
+    { 
         modelAnimator.SetTrigger("CheckPhone"); // a stand trigger
         isTalking = true;
 
-        // picks a random audio clip from the greeting audio clips
-        int clipToPlay = Random.Range(0, greetingAudioClips.Length);
-        npcAudiosource.PlayOneShot(greetingAudioClips[clipToPlay]);
+        if (isPickup)
+        {
+            // picks a random audio clip from the pickup audio clips
+            int clipToPlay = Random.Range(0, pickupAudioClips.Length);
+            npcAudiosource.PlayOneShot(pickupAudioClips[clipToPlay]);
+        }
+        else
+        {
+            // picks a random audio clip from the dropoff audio clips
+            int clipToPlay = Random.Range(0, dropoffDeliveryClips.Length);
+            npcAudiosource.PlayOneShot(dropoffDeliveryClips[clipToPlay]);
+        }
 
-        // this is set so that at the end of the interaction, the npc can give the appropriate farewell to the player
-        isPickupAudio = isPickup;
+        state = 2;
     }
 
-    public void EndInteraction()
+    void EndInteraction()
     {
-        isTalking = false;
+        modelAnimator.SetTrigger("StopTalking");
+        state = 0;
     }
 
 

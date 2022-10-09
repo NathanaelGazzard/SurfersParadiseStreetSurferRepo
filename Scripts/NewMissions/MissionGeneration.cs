@@ -26,6 +26,10 @@ public class MissionGeneration : MonoBehaviour
     int curSelectedMission = 0;
     bool isOnMission = false;
 
+    [SerializeField] GameManagerScript gameManagerRef;
+
+    int rewardOnCompletion = 0;
+
     // UI
     [SerializeField] GameObject missionUI;
     [SerializeField] TextMeshProUGUI pickupUI;
@@ -60,7 +64,12 @@ public class MissionGeneration : MonoBehaviour
         int dropOff = GeneratePickUpLocation(missionPoints, "SetAsDropOff");
 
         // some randomised function to generate these values
+
+
         int reward = 1000;
+
+        reward = Random.Range(750, 1200);
+
         // not as random, as we can use the MissionInteraction values to keep location and people the same 
         // for future speed runners, know where to go when we mention person x at location y
         string[] rndItems = { "Ciggies", "Mushrooms", "Drugz" };
@@ -132,9 +141,11 @@ public class MissionGeneration : MonoBehaviour
         if (missionStatus[curSelectedMission]) { Debug.Log("Already completed"); return; }
         gameObject.GetComponent<PlayerInteraction>().SendMessage("SetCurMissionID", curSelectedMission);
         currentMission = this.storyMissions[curSelectedMission];
+        rewardOnCompletion = currentMission.GetReward();
         ChangeMissionCard(currentMission.GetPickUp(), currentMission.GetDropOff(), currentMission.GetReward().ToString());
         isOnMission = true;
         compassRef.GetComponent<CompassScript>().AddWaypoint(currentMission.GetPickT());
+        CloseMissionMenu();
     }
 
     public void NextMission()
@@ -157,6 +168,9 @@ public class MissionGeneration : MonoBehaviour
 
     public void CompleteMission()
     {
+        gameManagerRef.ReceiveMoney(rewardOnCompletion);
+        rewardOnCompletion = 0;
+
         isOnMission = false;
         completedCount++;
         ChangeMissionCard("", "", "");

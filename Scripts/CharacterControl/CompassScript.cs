@@ -102,4 +102,13 @@ public class CompassScript : MonoBehaviour
         waypointMarkers.RemoveAt(i);
         Destroy(markerToDestroy);
     }
+
+    public Transform GetWaypointLocation()
+    {
+        if(waypoints.Count == 0)
+        {
+            return null;
+        }
+        return waypoints[0];
+    }
 }
