@@ -228,9 +228,6 @@ public class GameManagerScript : MonoBehaviour
         currentObjective = wishlistItems[itemRefNumber];
         goalCost = currentObjective.itemCost;
         ReceiveMoney(0);
-        MissionGeneration ms = GameObject.FindGameObjectWithTag("Player").GetComponent<MissionGeneration>();
-
-        ms.GenMissions();
     }
 
 

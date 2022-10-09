@@ -9,7 +9,7 @@ public class CarSpawnScript : MonoBehaviour
     int carsInSpawnZone = 0;
     bool spawnZoneFree = true;
     float delayTimer = 0;
-    public int carsLeftToSpawn = 50;
+    public int carsLeftToSpawn = 2;
     
 
     // Update is called once per frame

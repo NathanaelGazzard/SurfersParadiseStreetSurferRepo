@@ -48,6 +48,7 @@ public class MissionGeneration : MonoBehaviour
 
     public void GenMissions()
     {
+        Debug.Log("Generate misisons");
         for (int i = 0; i < 2; i++)
         {
             GenerateStoryMissionLocations();
