@@ -85,7 +85,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4419133742333654476}
-  - component: {fileID: 6758113089227076208}
+  - component: {fileID: 6802055501576703046}
   m_Layer: 0
   m_Name: Competitor_notification
   m_TagString: CompetitorNotification
@@ -114,7 +114,7 @@ RectTransform:
   m_AnchoredPosition: {x: -208, y: -196}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6758113089227076208
+--- !u!114 &6802055501576703046
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,12 +123,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4419133742333654479}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae31a37de437dae45bba4c763275afcc, type: 3}
+  m_Script: {fileID: 11500000, guid: 22de188ee1644554d9a4854704d48e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnNotification: {fileID: 4419133743833862340}
   competitorProgress: {fileID: 4419133743111182421}
-  competitorScript: {fileID: -6136089551345043053, guid: 5aa39e8e65973d043976072b1e018e68, type: 3}
+  competitorScript: {fileID: 4851435533686236392, guid: 5f7af7079baa8e74aa9679e3e79fd13b, type: 3}
   progressBar: {fileID: 4419133742259970780}
 --- !u!1 &4419133743111182423
 GameObject:

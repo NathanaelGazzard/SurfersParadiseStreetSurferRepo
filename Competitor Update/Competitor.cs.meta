@@ -3,7 +3,8 @@ guid: 405b8ef90b15a7740aff26f60e20d7c1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - myNavAgent: {fileID: 3429351245778386705, guid: 5f7af7079baa8e74aa9679e3e79fd13b, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
