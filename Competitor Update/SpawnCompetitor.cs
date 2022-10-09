@@ -27,7 +27,7 @@ public class SpawnCompetitor : MonoBehaviour
 
     // Start is called before the first frame update
     private void Start(){
-        InitiateCompetitor(clientPosition);
+        //InitiateCompetitor(clientPosition);
     }
 
     public void InitiateCompetitor(Vector3 goal){

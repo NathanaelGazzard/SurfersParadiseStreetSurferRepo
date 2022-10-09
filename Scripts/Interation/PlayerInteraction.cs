@@ -75,7 +75,8 @@ public class PlayerInteraction : MonoBehaviour
                     isOnMission = true;
                     compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetPickT(), 0);
                     compassRef.GetComponent<CompassScript>().AddWaypoint(msRef.GetCurMission().GetDropT());
-
+                    Vector3 competitorTarg = msRef.GetCurMission().GetDropT().position;
+                    GameObject.FindGameObjectWithTag("CompetitorObjects").GetComponent<SpawnCompetitor>().InitiateCompetitor(competitorTarg);
                 }
             }
             interactionUI.SetActive(!isMissionPickedUp);
@@ -92,6 +93,7 @@ public class PlayerInteraction : MonoBehaviour
                     msRef.CompleteMission();
                     isOnMission = false;
                     compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetDropT(), 0);
+                    GameObject.FindGameObjectWithTag("Competitor").GetComponent<Competitor>().PlayerReachedFirst();
                 }
             }
             interactionUI.SetActive(isMissionPickedUp);

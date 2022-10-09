@@ -212,6 +212,8 @@ public class GameManagerScript : MonoBehaviour
 
     public void BeginGame(int itemRefNumber)
     {
+        playerRef.GetComponent<MissionGeneration>().GenMissions();
+
         currentCash = PlayerPrefs.GetInt("PlayerCash", 0);
 
 

@@ -7,7 +7,7 @@ public class Competitor : MonoBehaviour
 {
     [SerializeField] NavMeshAgent myNavAgent;
 
-    private float startDelay = 5.0f;
+    private float startDelay = 1f;
     private float delayTimer = 0;
 
     private float totalDistance;

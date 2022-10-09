@@ -96,7 +96,7 @@ public class CompetitorNotification : MonoBehaviour
         } else if (remainingPercentage <= 0.001){
             remainingPercentage = 0;
         }
-        float progressBarCurrentWidth = remainingPercentage * progressBarWidth;
+        float progressBarCurrentWidth = progressBarWidth - remainingPercentage * progressBarWidth;
         progressBar.rectTransform.sizeDelta = new Vector2(progressBarCurrentWidth, progressBarHeight);
     }
 
