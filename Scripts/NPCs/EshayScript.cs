@@ -44,6 +44,10 @@ public class EshayScript : MonoBehaviour
     [SerializeField] AudioClip[] agroAudio;
     [SerializeField] AudioClip[] chaseAudio;
     [SerializeField] AudioClip[] giveUpAudio;
+    [SerializeField] AudioClip[] gotSomethingAudio;
+
+    public bool isFriendly = false; // set to true if the player gives them contraband
+    bool isWaiting = false;
 
 
 
@@ -69,6 +73,9 @@ public class EshayScript : MonoBehaviour
     {
         switch (state)
         {
+            case 5:
+                FriendlyApproach();
+                break;
             case 4:
                 ChasePlayer();
                 break;
@@ -221,6 +228,10 @@ public class EshayScript : MonoBehaviour
             modelAnimator.SetTrigger("BackToWalking");
             myNavAgent.speed = defaultWalkSpeed;
             myNavAgent.SetDestination(destination);
+
+            AudioClip clipToPlay = giveUpAudio[Random.Range(0, giveUpAudio.Length)];
+            eshayAudioSource.PlayOneShot(clipToPlay);
+
             state = 0;
         }
         else if (distToPlayer < 1.8f)
@@ -248,31 +259,95 @@ public class EshayScript : MonoBehaviour
 
 
 
-    // once the player enters the trigger for the Eshay, the eshay will start watching them.
-    void OnTriggerEnter(Collider other)
+    void FriendlyApproach()
     {
-        if (other.CompareTag("Player"))
+        if (isFriendly)
         {
-            playerClose = true;
-            playerRef = other.transform;
-            myNavAgent.ResetPath();
-            if (holdsGrudge)
+            float distToPlayer = Vector3.Distance(transform.position, playerRef.position);
+
+            if (distToPlayer > 2)
             {
-                modelAnimator.SetTrigger("StartRunning");
-
-                AudioClip clipToPlay = chaseAudio[Random.Range(0, chaseAudio.Length)];
-                eshayAudioSource.PlayOneShot(clipToPlay);
-
-                state = 4;
+                if (DelayCheck(0.2f))
+                {
+                    myNavAgent.SetDestination(playerRef.position);
+                }
+                if (isWaiting)
+                {
+                    isWaiting = false;
+                    modelAnimator.SetTrigger("BackToWalking");
+                }
             }
             else
             {
-                modelAnimator.SetTrigger("Agro");
+                if (!isWaiting)
+                {
+                    isWaiting = true;
+                    modelAnimator.SetTrigger("Agro");
+                    myNavAgent.ResetPath();
+                }
+            }
 
-                AudioClip clipToPlay = warningAudio[Random.Range(0, warningAudio.Length)];
+            if (distToPlayer > chaseDist + 2)
+            {
+                myNavAgent.SetDestination(destination);
+
+                AudioClip clipToPlay = giveUpAudio[Random.Range(0, giveUpAudio.Length)];
                 eshayAudioSource.PlayOneShot(clipToPlay);
 
-                state = 2;
+                state = 0;
+            }
+        }
+        else
+        {
+            modelAnimator.SetTrigger("BackToWalking");
+            myNavAgent.SetDestination(destination);
+            state = 0;
+        }
+    }
+
+
+
+    // once the player enters the trigger for the Eshay, the eshay will start watching them, unless the player has previously given them contraband
+    void OnTriggerEnter(Collider other)
+    {
+        if (!isFriendly)
+        {
+            if (other.CompareTag("Player"))
+            {
+                playerClose = true;
+                playerRef = other.transform;
+                myNavAgent.ResetPath();
+
+                if (other.GetComponent<CharacterControllerScript>().hasContraband)
+                {
+                    modelAnimator.SetTrigger("BackToWalking"); // incase they're having a smoke
+
+                    Vector3 lookTarg = new Vector3(playerRef.position.x, transform.position.y, playerRef.position.z);
+                    transform.LookAt(lookTarg);
+
+                    AudioClip clipToPlay = gotSomethingAudio[Random.Range(0, gotSomethingAudio.Length)];
+                    eshayAudioSource.PlayOneShot(clipToPlay);
+
+                    state = 5;
+                }
+                else if (holdsGrudge)
+                {
+                    modelAnimator.SetTrigger("StartRunning");
+
+                    AudioClip clipToPlay = chaseAudio[Random.Range(0, chaseAudio.Length)];
+                    eshayAudioSource.PlayOneShot(clipToPlay);
+
+                    state = 4;
+                }
+                else
+                {
+                    modelAnimator.SetTrigger("Agro");
+
+                    AudioClip clipToPlay = warningAudio[Random.Range(0, warningAudio.Length)];
+                    eshayAudioSource.PlayOneShot(clipToPlay);
+
+                    state = 2;
+                }
             }
         }
     }

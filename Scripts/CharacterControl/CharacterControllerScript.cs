@@ -57,6 +57,9 @@ public class CharacterControllerScript : MonoBehaviour
     [SerializeField] AudioClip[] playerJumpAudio;
 
     bool wasGrounded = true;
+
+
+    public bool hasContraband = true; // this will be checked by the eshays to see if they should be agro
     
 
     void Start()
