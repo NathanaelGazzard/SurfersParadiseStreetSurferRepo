@@ -146,6 +146,7 @@ public class MissionGeneration : MonoBehaviour
         ChangeMissionCard(currentMission.GetPickUp(), currentMission.GetDropOff(), currentMission.GetReward().ToString());
         isOnMission = true;
         compassRef.GetComponent<CompassScript>().AddWaypoint(currentMission.GetPickT());
+        Cursor.lockState = CursorLockMode.Locked;
         CloseMissionMenu();
     }
 

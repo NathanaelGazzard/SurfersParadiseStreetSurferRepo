@@ -93,7 +93,8 @@ public class PlayerInteraction : MonoBehaviour
                     msRef.CompleteMission();
                     isOnMission = false;
                     compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetDropT(), 0);
-                    GameObject.FindGameObjectWithTag("Competitor").GetComponent<Competitor>().PlayerReachedFirst();
+                    Destroy(GameObject.FindGameObjectWithTag("Competitor"));
+                    GameObject.FindGameObjectWithTag("CompetitorNotification").GetComponent<CompetitorNotification>().ResetContainer();
                 }
             }
             interactionUI.SetActive(isMissionPickedUp);

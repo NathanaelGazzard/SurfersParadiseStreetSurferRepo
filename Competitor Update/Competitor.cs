@@ -44,11 +44,6 @@ public class Competitor : MonoBehaviour
             myNavAgent.SetDestination(actualDestination);
         } 
 
-        //
-        if (goodsDelivered){
-            MissionFailed();
-        }
-
         // if competitor gets to the destination first
         if (Vector3.Distance(transform.position, actualDestination) <=  1.0f){
             CompetitorReachedFirst();
@@ -62,21 +57,10 @@ public class Competitor : MonoBehaviour
         return remainingPercentage;
     }
 
-    public void PlayerReachedFirst(){
-        goodsDelivered = true;
-    }
-
     // if the competitor reaches the destination first
     // simply kills the main character...for now.
     private void CompetitorReachedFirst(){
         GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterControllerScript>().ModifyHealth(-100);
-        GameObject.FindGameObjectWithTag("CompetitorNotification").GetComponent<CompetitorNotification>().ResetContainer(); 
-    }
-
-    private void MissionFailed(){
-        // for now
-        Destroy(gameObject);
-        Debug.Log("Competitor destroyed.");
         GameObject.FindGameObjectWithTag("CompetitorNotification").GetComponent<CompetitorNotification>().ResetContainer(); 
     }
 

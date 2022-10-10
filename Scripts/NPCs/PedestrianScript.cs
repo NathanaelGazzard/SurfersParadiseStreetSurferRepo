@@ -90,7 +90,9 @@ public class PedestrianScript : MonoBehaviour
 
     void NewDestination()
     {
-        destination = Vector3.zero;        
+        destination = Vector3.zero;
+
+
 
         while (destination == Vector3.zero)
         {
@@ -103,11 +105,15 @@ public class PedestrianScript : MonoBehaviour
             // find the navmesh point closest to the new point
             if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, 41))
             {
-                destination = hit.position;
+                NavMeshPath path = new NavMeshPath();
+                myNavAgent.CalculatePath(hit.position, path);
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    destination = hit.position;
+                    myNavAgent.SetPath(path);
+                }
             }
         }
-        //set the new destination
-        myNavAgent.SetDestination(destination);
     }
 
 

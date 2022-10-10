@@ -392,11 +392,15 @@ public class EshayScript : MonoBehaviour
             // find the navmesh point closest to the new point
             if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, 41))
             {
-                destination = hit.position;
+                NavMeshPath path = new NavMeshPath();
+                myNavAgent.CalculatePath(hit.position, path);
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    destination = hit.position;
+                    myNavAgent.SetPath(path);
+                }
             }
         }
-        //set the new destination
-        myNavAgent.SetDestination(destination);
     }
 
     private void OnDrawGizmos()

@@ -97,7 +97,7 @@ public class GameManagerScript : MonoBehaviour
             wishlistButtonLabels[i].text = wishlistItems[i].itemName + " - $" + wishlistItems[i].itemCost + ".00";
         }
 
-        Invoke("DisableFakeLoadScreen", 1f);
+        Invoke("DisableFakeLoadScreen", 3.2f);
     }
 
     void DisableFakeLoadScreen()
