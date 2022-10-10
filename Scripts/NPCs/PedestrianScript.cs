@@ -92,8 +92,6 @@ public class PedestrianScript : MonoBehaviour
     {
         destination = Vector3.zero;
 
-
-
         while (destination == Vector3.zero)
         {
             Vector3 randomPoint;

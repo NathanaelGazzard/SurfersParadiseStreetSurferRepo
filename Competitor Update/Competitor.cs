@@ -53,15 +53,14 @@ public class Competitor : MonoBehaviour
     } 
 
     // 
-    public float GetRemainingDistanceInPercentage(){
-        return remainingPercentage;
+    public float GetRemainingDistance(){
+        return remainingPercentage = Vector3.Distance(transform.position, actualDestination);
     }
 
     // if the competitor reaches the destination first
     // simply kills the main character...for now.
     private void CompetitorReachedFirst(){
-        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterControllerScript>().ModifyHealth(-100);
-        GameObject.FindGameObjectWithTag("CompetitorNotification").GetComponent<CompetitorNotification>().ResetContainer(); 
+        GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterControllerScript>().ModifyHealth(-100); 
     }
 
 }

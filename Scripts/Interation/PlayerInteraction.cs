@@ -21,6 +21,8 @@ public class PlayerInteraction : MonoBehaviour
     int curMissionID = -1;
     bool isMissionPickedUp = false;
 
+    [SerializeField] SpawnCompetitor compControllerRef;
+
 
     private void Start()
     {
@@ -93,8 +95,8 @@ public class PlayerInteraction : MonoBehaviour
                     msRef.CompleteMission();
                     isOnMission = false;
                     compassRef.GetComponent<CompassScript>().RemoveWaypoint(msRef.GetCurMission().GetDropT(), 0);
-                    Destroy(GameObject.FindGameObjectWithTag("Competitor"));
-                    GameObject.FindGameObjectWithTag("CompetitorNotification").GetComponent<CompetitorNotification>().ResetContainer();
+
+                    compControllerRef.CompetitorDestroyed();
                 }
             }
             interactionUI.SetActive(isMissionPickedUp);

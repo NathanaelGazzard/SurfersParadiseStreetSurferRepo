@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 public class SpawnCompetitor : MonoBehaviour
 {
@@ -21,14 +22,25 @@ public class SpawnCompetitor : MonoBehaviour
 
     private float totalDistance;
 
+    [SerializeField] GameObject trackerRef;
+    [SerializeField] TextMeshProUGUI trackerText;
+
+    Competitor compScriptRef = null;
+
 
     public Vector3 clientPosition = new Vector3(1732.0f, 11.0f, 2605.0f);
     private Quaternion rotation = Quaternion.Euler(0, 0, 0);
 
-    // Start is called before the first frame update
-    private void Start(){
-        //InitiateCompetitor(clientPosition);
+
+    void Update()
+    {
+        if (compScriptRef)
+        {
+            float remainingDist = compScriptRef.GetRemainingDistance();
+            trackerText.text = "A competitor is only " + ((int)remainingDist).ToString() + "m away from your client!";
+        }
     }
+
 
     public void InitiateCompetitor(Vector3 goal){
         GetAllSpawnPoints();
@@ -38,9 +50,19 @@ public class SpawnCompetitor : MonoBehaviour
         FindClosestPoint(goal);
 
         PickSpawnPoint();
-        Instantiate(competitorPrefab, actualSpawnPoint, rotation);
-        GameObject.FindGameObjectWithTag("CompetitorNotification").GetComponent<CompetitorNotification>().ShowContainer();
+        GameObject compRef = Instantiate(competitorPrefab, actualSpawnPoint, rotation);
+        compScriptRef = compRef.GetComponent<Competitor>();
+
+        trackerRef.SetActive(true);
     }
+
+    public void CompetitorDestroyed()
+    {
+        trackerRef.SetActive(false);
+        Destroy(compScriptRef.gameObject);
+        compScriptRef = null;
+    }
+
 
     // find all the postion (Vector3 value) of possible spawn points and store them in spawnPoints list.
     private void GetAllSpawnPoints(){
@@ -51,6 +73,7 @@ public class SpawnCompetitor : MonoBehaviour
             spawnPoints[i] = spawnPointPosition.position;
         }
     }
+
 
     //find all the position of (Vector3 value) of all possible destinatino points and store them in destinationPoints list.
     private void GetAllDestinationPoints(){
@@ -112,6 +135,4 @@ public class SpawnCompetitor : MonoBehaviour
     public Vector3 GetDestination(){
         return actualDestination;
     }
-
-
 }
