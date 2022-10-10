@@ -200,7 +200,7 @@ public class PedestrianScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //this is when the player initially hits the pedestrian
-        if (other.CompareTag("Player") && state < 2 && !hasPunched)
+        if (other.CompareTag("Player") && state < 1 && !hasPunched)
         {
             proximityBarkObject.SetActive(false); // pedestrian will no longer yell about the player getting too close
 

@@ -31,6 +31,8 @@ public class MissionGeneration : MonoBehaviour
     int rewardOnCompletion = 0;
 
     // UI
+    [SerializeField] GameObject trackerRef;
+    [SerializeField] TextMeshProUGUI trackerText;
     [SerializeField] GameObject missionUI;
     [SerializeField] TextMeshProUGUI pickupUI;
     [SerializeField] TextMeshProUGUI dropOffUI;
@@ -48,8 +50,7 @@ public class MissionGeneration : MonoBehaviour
 
     public void GenMissions()
     {
-        Debug.Log("Generate misisons");
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 6; i++)
         {
             GenerateStoryMissionLocations();
         }
@@ -139,7 +140,10 @@ public class MissionGeneration : MonoBehaviour
     public void SetMission()
     {
         if (isOnMission) return;
-        if (missionStatus[curSelectedMission]) { Debug.Log("Already completed"); return; }
+        if (missionStatus[curSelectedMission]) {
+            trackerRef.SetActive(true);
+            trackerText.text = "Mission already completed";
+            return; }
         gameObject.GetComponent<PlayerInteraction>().SendMessage("SetCurMissionID", curSelectedMission);
         currentMission = this.storyMissions[curSelectedMission];
         rewardOnCompletion = currentMission.GetReward();
@@ -148,6 +152,8 @@ public class MissionGeneration : MonoBehaviour
         compassRef.GetComponent<CompassScript>().AddWaypoint(currentMission.GetPickT());
         Cursor.lockState = CursorLockMode.Locked;
         CloseMissionMenu();
+        trackerRef.SetActive(false);
+        trackerText.text = "";
     }
 
     public void NextMission()
